@@ -1,0 +1,19 @@
+--extra-index-url https://download.pytorch.org/whl/cu121
+
+torch
+torchvision
+torchaudio
+
+transformers
+pillow
+numpy
+opencv-python
+fastapi
+uvicorn
+python-multipart
+grad-cam
+matplotlib
+sentencepiece
+protobuf
+groq
+python-dotenv
