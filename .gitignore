@@ -20,6 +20,7 @@ disvenv/
 # Uploads
 Backend/uploads/
 Backend/models/
+Backend/gradcam/
 # Logs
 *.log
 
