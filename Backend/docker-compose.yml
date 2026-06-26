@@ -1,0 +1,13 @@
+services:
+  deepcheck-backend:
+    build: .
+    container_name: deepcheck-backend
+    ports:
+      - "8000:8000"
+    env_file:
+      - .env
+    volumes:
+      - ./uploads:/app/uploads
+      - ./gradcam:/app/gradcam
+      - ./models:/app/models
+    restart: always
