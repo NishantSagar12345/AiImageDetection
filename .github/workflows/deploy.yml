@@ -1,9 +1,7 @@
 name: Deploy DeepCheck Backend to AWS
 
 on:
-  push:
-    branches:
-      - main
+  workflow_dispatch:
 
 jobs:
   deploy:
