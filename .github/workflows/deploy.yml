@@ -20,7 +20,7 @@ jobs:
           node-version: 20
 
       - name: Build React frontend
-        working-directory: Frontend
+        working-directory: Frontend/ai-image-detector
         run: |
           npm install
           npm run build
@@ -32,7 +32,7 @@ jobs:
           host: ${{ secrets.EC2_HOST }}
           username: ${{ secrets.EC2_USERNAME }}
           key: ${{ secrets.EC2_SSH_KEY }}
-          source: "Frontend/dist/*"
+          source: "Frontend/ai-image-detector/dist/*"
           target: "/home/ubuntu/deepcheck-frontend"
           strip_components: 2
           rm: true
