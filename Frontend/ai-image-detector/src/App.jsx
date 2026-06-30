@@ -65,7 +65,7 @@ function App() {
       <h1>DeepCheck</h1>
 
       <p className="subtitle">
-        Explainable AImage detection using Deep Learning and
+        Explainable AI Image detection using Deep Learning and
         Vision-Language reasoning.
       </p>
 

@@ -71,7 +71,7 @@ model.eval()
 @app.get("/")
 def home():
     return {
-        "message": "AI Image Detector backend is running",
+        "message": "AI Image Detector backend is running successfully",
         "device": device
     }
 
