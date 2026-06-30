@@ -46,7 +46,7 @@ device = "cuda" if torch.cuda.is_available() else "cpu"
 if device == "cuda":
     print(f"Using CUDA GPU: {torch.cuda.get_device_name(0)}")
 else:
-    print("Using CPU")
+    print("Using the CPU")
 
 processor = AutoImageProcessor.from_pretrained(
     MODEL_NAME
