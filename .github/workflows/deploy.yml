@@ -47,8 +47,8 @@ jobs:
           script: |
             cd ~/AiImageDetection
 
-            git pull origin main
-
+            git fetch origin main
+            git reset --hard origin/main
             echo "Deploying backend..."
             cd Backend
             docker compose down
