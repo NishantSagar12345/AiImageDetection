@@ -66,7 +66,7 @@ function App() {
 
       <p className="subtitle">
         Explainable AI Image detection using Deep Learning and
-        Vision anguage reasoning.
+        LLM reasoning.
       </p>
 
       <div className="upload-box">
