@@ -8,9 +8,6 @@ __pycache__/
 *.so
 
 # Virtual Environments
-
-env/
-ENV/
 disvenv/
 
 # Environment Variables
@@ -24,12 +21,6 @@ Backend/gradcam/
 # Logs
 *.log
 
-# OS Files
-.DS_Store
-Thumbs.db
-
-# VS Code
-.vscode/
 
 # ======================
 # Node / React

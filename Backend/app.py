@@ -75,9 +75,17 @@ def home():
         "device": device
     }
 
+def clear_folder(folder_path):
+    for filename in os.listdir(folder_path):
+        file_path = os.path.join(folder_path, filename)
 
+        if os.path.isfile(file_path):
+            os.remove(file_path)
+            
 @app.post("/predict")
 async def predict(file: UploadFile = File(...)):
+    clear_folder(UPLOAD_DIR)
+    clear_folder(GRADCAM_DIR)
     file_ext = file.filename.split(".")[-1].lower()
 
     allowed_exts = [
