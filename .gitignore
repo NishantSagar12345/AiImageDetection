@@ -21,6 +21,9 @@ Backend/gradcam/
 # Logs
 *.log
 
+Kaggle/
+deploymentarch.txt
+
 
 # ======================
 # Node / React
