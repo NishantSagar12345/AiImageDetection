@@ -68,6 +68,7 @@ def explain_gradcam_with_llm(
     Use cautious language such as "may", "could", or "might".
     Do not simply say "the highlighted regions contributed".
     Do not claim absolute proof.
+    Always include the probability percentages in the paragraph
     Write one concise paragraph under 150 words for a non-technical user.
     """
 
