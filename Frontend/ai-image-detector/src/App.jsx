@@ -1,8 +1,8 @@
 import { useState } from "react";
 import "./App.css";
 
-const API_URL = "/predict";
-const BACKEND_URL = "";
+const API_URL = "http://127.0.0.1:8000/predict";
+const BACKEND_URL = "http://127.0.0.1:8000";
 
 function App() {
   const [file, setFile] = useState(null);
@@ -75,10 +75,9 @@ function App() {
         </header>
 
         <div className="upload-panel">
-          <label className="file-drop">
+          
             <input type="file" accept="image/*" onChange={handleImageChange} />
-            <span>{file ? file.name : "Choose an image to analyse"}</span>
-          </label>
+            
 
           <button onClick={predictImage} disabled={loading}>
             {loading ? "Analyzing..." : "Analyze Image"}
