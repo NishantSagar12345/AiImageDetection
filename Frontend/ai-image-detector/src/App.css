@@ -1,3 +1,6 @@
+/* ==========================================================================
+   1. Global Resets & Base Styles
+   ========================================================================== */
 * {
   box-sizing: border-box;
 }
@@ -5,94 +8,58 @@
 body {
   margin: 0;
   font-family: Inter, system-ui, Arial, sans-serif;
-  background: rgb(6, 6, 6);
+  background:
+    radial-gradient(circle at top left, rgba(124, 58, 237, 0.35), transparent 35%),
+    radial-gradient(circle at top right, rgba(37, 99, 235, 0.35), transparent 35%),
+    #020617;
   color: #f8fafc;
-  overflow-x: hidden;
 }
 
+/* ==========================================================================
+   2. Layout Containers
+   ========================================================================== */
 .page {
   min-height: 100vh;
   padding: 3px 20px;
-  position: relative;
-  overflow: hidden;
-  isolation: isolate;
 }
 
-.page::before {
-  content: "";
-  position: fixed;
-  inset: -50%;
-  z-index: -2;
-  background:
-    radial-gradient(circle at 20% 30%, rgba(124, 58, 237, 0.65), transparent 25%),
-    radial-gradient(circle at 80% 20%, rgba(37, 99, 235, 0.6), transparent 28%),
-    radial-gradient(circle at 50% 80%, rgba(14, 160, 233, 0.455), transparent 30%),
-    radial-gradient(circle at 70% 70%, rgba(168, 85, 247, 0.45), transparent 28%),
-    rgb(6, 6, 6);
-  background-size: 185% 185%;
-  animation: waterFlow 8s ease-in-out infinite alternate;
-}
-
-.page::after {
-  content: "";
-  position: fixed;
-  inset: -20%;
-  z-index: -1;
-  background:
-    linear-gradient(
-      120deg,
-      transparent 20%,
-      rgba(139, 92, 246, 0.22) 40%,
-      rgba(59, 130, 246, 0.25) 50%,
-      transparent 75%
-    );
-  filter: blur(45px);
-  animation: waveMove 5s ease-in-out infinite alternate;
-  pointer-events: none;
-}
-
-@keyframes waterFlow {
-  0% {
-    transform: translate(-6%, -4%) scale(1) rotate(0deg);
-    background-position: 0% 50%;
-  }
-
-  50% {
-    transform: translate(4%, 5%) scale(1.08) rotate(4deg);
-    background-position: 80% 40%;
-  }
-
-  100% {
-    transform: translate(7%, -3%) scale(1.15) rotate(-3deg);
-    background-position: 100% 60%;
-  }
-}
-
-@keyframes waveMove {
-  0% {
-    transform: translateX(-40%) translateY(-8%) rotate(0deg);
-    opacity: 0.35;
-  }
-
-  50% {
-    transform: translateX(10%) translateY(5%) rotate(8deg);
-    opacity: 0.85;
-  }
-
-  100% {
-    transform: translateX(45%) translateY(-5%) rotate(-6deg);
-    opacity: 0.55;
-  }
-}
 .container {
   max-width: 1380px;
   margin: 0 auto;
 }
 
+.main-layout {
+  display: grid;
+  grid-template-columns: 0.95fr 1.05fr;
+  gap: 28px;
+  align-items: start;
+}
+
+/* ==========================================================================
+   3. Hero Section & Typography
+   ========================================================================== */
 .hero {
   text-align: center;
-  margin-bottom: 28px;
-  margin-top: 3px;
+  margin: 3px 0 28px;
+}
+
+h1 {
+  font-size: 50px;
+  font-weight: 600;
+  line-height: 1.2;
+  margin: 12px 0 20px;
+  padding: 8px 0;
+  overflow: visible;
+  background: linear-gradient(90deg, #ffffff, #c4b5fd);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.hero p {
+  max-width: 760px;
+  margin: 12px auto 0;
+  font-size: 18px;
+  color: #cbd5e1;
 }
 
 .badge {
@@ -107,25 +74,9 @@ body {
   margin-bottom: 14px;
 }
 
-h1 {
-  font-size: 50px;
-  font-weight: 600;
-  line-height: 1.2;
-  margin: 12px 0 20px;
-  padding: 8px 0;
-  overflow: visible;
-
-  background: linear-gradient(90deg, #ffffff, #c4b5fd);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
-.hero p {
-  max-width: 760px;
-  margin: 12px auto 0;
-  font-size: 18px;
-  color: #cbd5e1;
-}
-
+/* ==========================================================================
+   4. Interactive Elements (Inputs & Buttons)
+   ========================================================================== */
 .upload-panel {
   display: flex;
   justify-content: center;
@@ -158,7 +109,7 @@ button {
   font-size: 16px;
   font-weight: 800;
   box-shadow: 0 12px 30px rgba(79, 70, 229, 0.35);
-  transition: 0.25s ease;
+  transition: transform 0.25s ease, box-shadow 0.25s ease, opacity 0.25s ease;
 }
 
 button:hover {
@@ -171,13 +122,9 @@ button:disabled {
   transform: none;
 }
 
-.main-layout {
-  display: grid;
-  grid-template-columns: 0.95fr 1.05fr;
-  gap: 28px;
-  align-items: start;
-}
-
+/* ==========================================================================
+   5. Preview & Result Panels
+   ========================================================================== */
 .preview-section {
   display: flex;
   flex-direction: column;
@@ -195,7 +142,7 @@ button:disabled {
 
 .preview-card {
   padding: 22px;
-  transition: 0.25s ease;
+  transition: transform 0.25s ease, border-color 0.25s ease;
 }
 
 .preview-card:hover {
@@ -233,6 +180,9 @@ button:disabled {
   padding: 30px;
 }
 
+/* ==========================================================================
+   6. Data Visualization & Metrics
+   ========================================================================== */
 .prediction-card {
   padding: 26px;
   border-radius: 24px;
@@ -299,6 +249,7 @@ button:disabled {
   color: #ffffff;
 }
 
+/* Progress Bars */
 .bar-container label {
   display: flex;
   justify-content: space-between;
@@ -331,6 +282,9 @@ button:disabled {
   background: linear-gradient(90deg, #ef4444, #a855f7);
 }
 
+/* ==========================================================================
+   7. AI/LLM Response Box
+   ========================================================================== */
 .llm-box {
   margin-top: 30px;
   padding: 26px;
@@ -353,6 +307,9 @@ button:disabled {
   color: #e2e8f0;
 }
 
+/* ==========================================================================
+   8. States (Empty, Loading, Animations)
+   ========================================================================== */
 .empty-result,
 .loading-box {
   min-height: 640px;
@@ -387,6 +344,9 @@ button:disabled {
   }
 }
 
+/* ==========================================================================
+   9. Media Queries (Responsive Breakpoints)
+   ========================================================================== */
 @media (max-width: 950px) {
   .main-layout {
     grid-template-columns: 1fr;
