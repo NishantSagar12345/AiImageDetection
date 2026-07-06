@@ -5,7 +5,7 @@
 body {
   margin: 0;
   font-family: Inter, system-ui, Arial, sans-serif;
-  background: #020617;
+  background: rgb(6, 6, 6);
   color: #f8fafc;
   overflow-x: hidden;
 }
@@ -26,10 +26,10 @@ body {
   background:
     radial-gradient(circle at 20% 30%, rgba(124, 58, 237, 0.65), transparent 25%),
     radial-gradient(circle at 80% 20%, rgba(37, 99, 235, 0.6), transparent 28%),
-    radial-gradient(circle at 50% 80%, rgba(14, 165, 233, 0.45), transparent 30%),
+    radial-gradient(circle at 50% 80%, rgba(14, 160, 233, 0.455), transparent 30%),
     radial-gradient(circle at 70% 70%, rgba(168, 85, 247, 0.45), transparent 28%),
-    #020617;
-  background-size: 180% 180%;
+    rgb(6, 6, 6);
+  background-size: 185% 185%;
   animation: waterFlow 8s ease-in-out infinite alternate;
 }
 
