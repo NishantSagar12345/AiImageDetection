@@ -13,6 +13,7 @@ function App() {
 
   const handleImageChange = (e) => {
     const selectedFile = e.target.files[0];
+
     if (selectedFile) {
       setFile(selectedFile);
       setPreviewUrl(URL.createObjectURL(selectedFile));
@@ -60,106 +61,125 @@ function App() {
     }
   };
 
+  const isFake = result?.prediction?.toLowerCase().includes("ai");
+
   return (
-    <div className="container">
-      <h1>DeepCheck</h1>
+    <div className="page">
+      <div className="container">
+        <header className="hero">
+          <h1>DeepCheck</h1>
+          <p>
+            AI image authenticity analysis with Deep Learning and
+            Generative AI reasoning.
+          </p>
+        </header>
 
-      <p className="subtitle">
-        Explainable AI Image detection using Deep Learning and
-        LLM reasoning.
-      </p>
+        <div className="upload-panel">
+          <label className="file-drop">
+            <input type="file" accept="image/*" onChange={handleImageChange} />
+            <span>{file ? file.name : "Choose an image to analyse"}</span>
+          </label>
 
-      <div className="upload-box">
-        <input type="file" accept="image/*" onChange={handleImageChange} />
-
-        <button onClick={predictImage} disabled={loading}>
-          {loading ? "Analyzing..." : "Analyze Image"}
-        </button>
-      </div>
-
-      <div className="main-layout">
-        <div className="preview-section">
-          <div className="preview-card">
-            <h3>Uploaded Image</h3>
-
-            {previewUrl ? (
-              <img src={previewUrl} className="image-box" alt="Uploaded" />
-            ) : (
-              <div className="image-box placeholder">No image selected</div>
-            )}
-          </div>
-
-          <div className="preview-card">
-            <h3>Grad-CAM Explanation</h3>
-
-            {gradcamUrl ? (
-              <img src={gradcamUrl} className="image-box" alt="Grad-CAM" />
-            ) : (
-              <div className="image-box placeholder">No Grad-CAM yet</div>
-            )}
-          </div>
+          <button onClick={predictImage} disabled={loading}>
+            {loading ? "Analyzing..." : "Analyze Image"}
+          </button>
         </div>
 
-        <div className="result-box">
-          {loading ? (
-            <div className="loading-box">
-              <h2>Analyzing...</h2>
-              <p>
-                Generating prediction, Grad-CAM heatmap, and Vision-Language
-                explanation.
-              </p>
-            </div>
-          ) : result ? (
-            <>
-              <h2>Prediction: {result.prediction}</h2>
-
-              <p className="confidence-text">
-                Confidence: {(result.confidence * 100).toFixed(2)}%
-              </p>
-
-              <div className="bar-container">
-                <label>
-                  Real Probability:{" "}
-                  {(result.real_probability * 100).toFixed(2)}%
-                </label>
-
-                <div className="bar">
-                  <div
-                    className="real-bar"
-                    style={{
-                      width: `${result.real_probability * 100}%`,
-                    }}
-                  ></div>
-                </div>
-
-                <label>
-                  AI Probability: {(result.fake_probability * 100).toFixed(2)}%
-                </label>
-
-                <div className="bar">
-                  <div
-                    className="fake-bar"
-                    style={{
-                      width: `${result.fake_probability * 100}%`,
-                    }}
-                  ></div>
-                </div>
-              </div>
-
-              {result.llm_explanation && (
-                <div className="llm-box">
-                  <h3>Vision-Language Explanation</h3>
-                  <p>{result.llm_explanation}</p>
-                </div>
+        <main className="main-layout">
+          <section className="preview-section">
+            <div className="preview-card">
+              <div className="card-title">Uploaded Image</div>
+              {previewUrl ? (
+                <img src={previewUrl} className="image-box" alt="Uploaded" />
+              ) : (
+                <div className="image-box placeholder">No image selected</div>
               )}
-            </>
-          ) : (
-            <div className="empty-result">
-              Upload an image and click Analyze Image to view prediction
-              results.
             </div>
-          )}
-        </div>
+
+            <div className="preview-card">
+              <div className="card-title">Explainability Heatmap</div>
+              {gradcamUrl ? (
+                <img src={gradcamUrl} className="image-box" alt="Grad-CAM" />
+              ) : (
+                <div className="image-box placeholder">No Grad-CAM yet</div>
+              )}
+            </div>
+          </section>
+
+          <section className="result-box">
+            {loading ? (
+              <div className="loading-box">
+                <div className="spinner"></div>
+                <h2>DeepCheck is analysing...</h2>
+                <p>Running prediction, Grad-CAM, and LLM explanation.</p>
+              </div>
+            ) : result ? (
+              <>
+                <div className={`prediction-card ${isFake ? "fake" : "real"}`}>
+                  <span className="prediction-label">Prediction</span>
+                  <h2>{result.prediction}</h2>
+                  <p>{(result.confidence * 100).toFixed(2)}% confidence</p>
+                </div>
+
+                <div className="metrics-grid">
+                  <div className="metric-card">
+                    <span>Real</span>
+                    <strong>
+                      {(result.real_probability * 100).toFixed(2)}%
+                    </strong>
+                  </div>
+
+                  <div className="metric-card">
+                    <span>AI</span>
+                    <strong>
+                      {(result.fake_probability * 100).toFixed(2)}%
+                    </strong>
+                  </div>
+                </div>
+
+                <div className="bar-container">
+                  <label>
+                    Real Probability{" "}
+                    <span>
+                      {(result.real_probability * 100).toFixed(2)}%
+                    </span>
+                  </label>
+                  <div className="bar">
+                    <div
+                      className="real-bar"
+                      style={{ width: `${result.real_probability * 100}%` }}
+                    ></div>
+                  </div>
+
+                  <label>
+                    AI Probability{" "}
+                    <span>
+                      {(result.fake_probability * 100).toFixed(2)}%
+                    </span>
+                  </label>
+                  <div className="bar">
+                    <div
+                      className="fake-bar"
+                      style={{ width: `${result.fake_probability * 100}%` }}
+                    ></div>
+                  </div>
+                </div>
+
+                {result.llm_explanation && (
+                  <div className="llm-box">
+                    <h3>Vision-Language Explanation</h3>
+                    <p>{result.llm_explanation}</p>
+                  </div>
+                )}
+              </>
+            ) : (
+              <div className="empty-result">
+                <h2>Ready to analyse</h2>
+                <p>Upload an image to view prediction, heatmap, and explanation.</p>
+              </div>
+            )}
+          </section>
+        </main>
       </div>
     </div>
   );
