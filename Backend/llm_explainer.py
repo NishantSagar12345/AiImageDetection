@@ -74,7 +74,8 @@ def explain_gradcam_with_llm(
 
     try:
         response = client.chat.completions.create(
-            model="meta-llama/llama-4-scout-17b-16e-instruct",
+            model="qwen/qwen3.6-27b",
+            reasoning_effort="none",
             messages=[
                 {
                     "role": "user",
