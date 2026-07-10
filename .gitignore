@@ -20,7 +20,6 @@ Backend/models/
 Backend/gradcam/
 # Logs
 *.log
-
 Kaggle/
 deploymentarch.txt
 
