@@ -47,8 +47,14 @@ jobs:
           script: |
             cd ~/AiImageDetection
 
+            echo "Updating repository..."
             git fetch origin main
             git reset --hard origin/main
+            
+            # Remove the Kaggle folder so it doesn't live on the EC2 instance
+            echo "Removing Kaggle notebook files from production..."
+            rm -rf Kaggle
+            rm -rf deploymentarch.txt
             echo "Deploying backend..."
             cd Backend
             docker compose down

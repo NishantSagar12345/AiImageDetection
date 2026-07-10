@@ -67,7 +67,7 @@ function App() {
     <div className="page">
       <div className="container">
         <header className="hero">
-          <h1>DeepCheck</h1>
+          <h1>DeepCheck AI</h1>
           <p>
             AI image authenticity analysis with Deep Learning and
             Generative AI reasoning.

@@ -1,0 +1,376 @@
+# DeepCheck Deployment Guide (AWS EC2 + Docker + Nginx)
+
+## 1. Launch EC2 Instance
+
+* Launch Ubuntu 24.04 LTS EC2 instance
+* Increase root EBS volume to 30 GB
+* Create and download SSH key (.pem)
+
+Open the following inbound ports in the Security Group:
+
+| Port | Purpose                |
+| ---- | ---------------------- |
+| 22   | SSH                    |
+| 80   | React Frontend (Nginx) |
+| 8000 | FastAPI Backend        |
+
+---
+
+# 2. Connect to EC2
+
+```bash
+ssh -i deepcheck-key.pem ubuntu@<EC2_PUBLIC_IP>
+```
+
+---
+
+# 3. Install Docker
+
+```bash
+sudo apt update
+
+sudo apt install docker.io docker-compose-v2 git -y
+
+sudo systemctl enable docker
+
+sudo systemctl start docker
+
+sudo usermod -aG docker ubuntu
+
+newgrp docker
+```
+
+Verify:
+
+```bash
+docker --version
+
+docker compose version
+```
+
+---
+
+# 4. Clone Repository
+
+```bash
+git clone <repository-url>
+
+cd AiImageDetection
+```
+
+---
+
+# 5. Copy Trained Model
+
+From local machine:
+
+```powershell
+scp -i deepcheck-key.pem .\best_openfake_siglip50k.pth ubuntu@<EC2_PUBLIC_IP>:/home/ubuntu/AiImageDetection/Backend/models/
+```
+
+---
+
+# 6. Configure Environment Variables
+
+Create:
+
+```text
+Backend/.env
+```
+
+Example:
+
+```text
+GROQ_API_KEY=xxxxxxxxxxxxxxxx
+```
+
+---
+
+# 7. Build Docker Image
+
+```bash
+cd Backend
+
+docker compose up -d --build
+```
+
+Useful Docker commands:
+
+```bash
+docker ps
+
+docker logs deepcheck-backend
+
+docker compose down
+
+docker compose up -d
+
+docker compose up -d --build
+```
+
+---
+
+# 8. Verify Backend
+
+Test locally:
+
+```bash
+curl http://127.0.0.1:8000/
+```
+
+Expected:
+
+```json
+{
+    "message":"AI Image Detector backend is running"
+}
+```
+
+Swagger:
+
+```
+http://<EC2_PUBLIC_IP>:8000/docs
+```
+
+---
+
+# 9. Build React Frontend
+
+On local machine:
+
+```bash
+npm install
+
+npm run build
+```
+
+Generated folder:
+
+```
+dist/
+```
+
+---
+
+# 10. Upload React Build
+
+```powershell
+scp -i deepcheck-key.pem -r .\dist ubuntu@<EC2_PUBLIC_IP>:/home/ubuntu/
+```
+
+---
+
+# 11. Install Nginx
+
+```bash
+sudo apt install nginx -y
+
+sudo systemctl enable nginx
+
+sudo systemctl start nginx
+```
+
+---
+
+# 12. Copy React Build
+
+```bash
+sudo rm -rf /var/www/html/*
+
+sudo cp -r ~/dist/* /var/www/html/
+
+sudo chown -R www-data:www-data /var/www/html
+
+sudo chmod -R 755 /var/www/html
+```
+
+---
+
+# 13. Configure Nginx
+
+Edit:
+
+```bash
+sudo nano /etc/nginx/sites-available/default
+```
+
+Configuration:
+
+```nginx
+server {
+
+    listen 80;
+
+    client_max_body_size 50M;
+
+    root /var/www/html;
+
+    index index.html;
+
+    location / {
+        try_files $uri /index.html;
+    }
+
+    location /predict {
+        proxy_pass http://127.0.0.1:8000/predict;
+    }
+
+    location /gradcam {
+        proxy_pass http://127.0.0.1:8000/gradcam;
+    }
+
+    location /docs {
+        proxy_pass http://127.0.0.1:8000/docs;
+    }
+
+    location /openapi.json {
+        proxy_pass http://127.0.0.1:8000/openapi.json;
+    }
+
+}
+```
+
+Test:
+
+```bash
+sudo nginx -t
+```
+
+Restart:
+
+```bash
+sudo systemctl restart nginx
+```
+
+---
+
+# 14. Update React API
+
+Change:
+
+```javascript
+const API_URL="/predict";
+
+const BACKEND_URL="";
+```
+
+Rebuild:
+
+```bash
+npm run build
+```
+
+Upload new dist folder.
+
+---
+
+# 15. Verify Deployment
+
+Frontend:
+
+```
+http://<EC2_PUBLIC_IP>
+```
+
+Backend API:
+
+```
+http://<EC2_PUBLIC_IP>:8000/docs
+```
+
+---
+
+# 16. Common Troubleshooting
+
+### Backend not reachable
+
+Check Security Group:
+
+```
+Port 8000
+```
+
+---
+
+### Container not running
+
+```bash
+docker ps
+
+docker logs deepcheck-backend
+```
+
+---
+
+### Frontend cannot connect
+
+Check:
+
+```javascript
+const API_URL="/predict";
+```
+
+Not:
+
+```javascript
+http://127.0.0.1:8000
+```
+
+---
+
+### 413 Request Entity Too Large
+
+Add:
+
+```nginx
+client_max_body_size 50M;
+```
+
+Restart nginx.
+
+---
+
+### Verify backend
+
+```bash
+curl http://127.0.0.1:8000/
+```
+
+---
+
+### Verify nginx
+
+```bash
+sudo nginx -t
+
+sudo systemctl restart nginx
+```
+
+---
+
+# Final Architecture
+
+```
+                Browser
+                    │
+                    ▼
+              Nginx (Port 80)
+                    │
+      ┌─────────────┴─────────────┐
+      ▼                           ▼
+ React Frontend             FastAPI (8000)
+                                   │
+                ┌──────────────────┼──────────────────┐
+                ▼                  ▼                  ▼
+          SigLIP Detector      Grad-CAM       Vision LLM (Groq)
+```
+This deployment gives you a production-style architecture:
+
+Frontend: React served by Nginx.
+Backend: FastAPI running in Docker.
+Model: SigLIP with Grad-CAM.
+Vision-Language Layer: Llama 4 Scout via Groq.
+Infrastructure: AWS EC2.
+Reverse Proxy: Nginx.
+Version Control: GitHub.
+Deployment: Docker Compose.
