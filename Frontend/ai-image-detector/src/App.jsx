@@ -75,10 +75,7 @@ function App() {
         </header>
 
         <div className="upload-panel">
-          
-            <input type="file" accept="image/*" onChange={handleImageChange} />
-            
-
+          <input type="file" accept="image/*" onChange={handleImageChange} />
           <button onClick={predictImage} disabled={loading}>
             {loading ? "Analyzing..." : "Analyze Image"}
           </button>
@@ -110,7 +107,7 @@ function App() {
               <div className="loading-box">
                 <div className="spinner"></div>
                 <h2>DeepCheck is analysing...</h2>
-                <p>Running Deep Learning prediction, Grad-CAM, and LLM explanation.</p>
+                <p>Running prediction, Grad-CAM, and LLM explanation.</p>
               </div>
             ) : result ? (
               <>
@@ -166,7 +163,7 @@ function App() {
 
                 {result.llm_explanation && (
                   <div className="llm-box">
-                    <h3>Meta's VLLM Explanation</h3>
+                    <h3>LLM Explanation</h3>
                     <p>{result.llm_explanation}</p>
                   </div>
                 )}
@@ -179,35 +176,6 @@ function App() {
             )}
           </section>
         </main>
-        <footer className="footer">
-  <div className="footer-content">
-    <div className="footer-left">
-      <h3>DeepCheck</h3>
-      <p>
-        Designed and Developed by <strong>Nishant Sagar Pandey</strong>
-      </p>
-   
-    </div>
-
-    <div className="footer-right">
-      <a
-        href="https://github.com/NishantSagar12345"
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        GitHub
-      </a>
-
-      <a
-        href="https://www.linkedin.com/in/nishant-pandey-310551206/"
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        LinkedIn
-      </a>
-    </div>
-  </div>
-</footer>
       </div>
     </div>
   );
