@@ -53,7 +53,7 @@ h1 {
   padding: 8px 0;
   overflow: visible;
   background: linear-gradient(90deg, #ffffff, #c4b5fd);
-  -webkit-background-clip: text;
+
   -webkit-text-fill-color: transparent;
 }
 
