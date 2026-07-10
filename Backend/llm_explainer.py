@@ -68,6 +68,7 @@ def explain_gradcam_with_llm(
     Use cautious language such as "may", "could", or "might".
     Do not simply say "the highlighted regions contributed".
     Do not claim absolute proof.
+    Do not state that the detector was confused, misled, or fooled. Interpret the Grad-CAM heatmap only as an indication of which image regions influenced the classifier's decision. When confidence is high, describe the highlighted regions as supporting the prediction rather than causing confusion.
     Always include the probability percentages in the paragraph.
     Write one concise paragraph under 150 words for a non-technical user.
     """
