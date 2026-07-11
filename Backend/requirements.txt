@@ -13,5 +13,5 @@ grad-cam
 matplotlib
 sentencepiece
 protobuf
-groq
+openai
 python-dotenv
