@@ -110,7 +110,7 @@ function App() {
               <div className="loading-box">
                 <div className="spinner"></div>
                 <h2>DeepCheck is analysing...</h2>
-                <p>Running Deep Learning prediction, Grad-CAM, and LLM explanation.</p>
+                <p>Running Deep Learning prediction, Grad-CAM, and GPT4o-mini explanation.</p>
               </div>
             ) : result ? (
               <>
@@ -166,7 +166,7 @@ function App() {
 
                 {result.llm_explanation && (
                   <div className="llm-box">
-                    <h3>GPT-4o-mini Explanation</h3>
+                    <h3>GPT4o-mini Explanation</h3>
                     <p>{result.llm_explanation}</p>
                   </div>
                 )}

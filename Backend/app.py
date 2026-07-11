@@ -76,7 +76,6 @@ def home():
     }
 
 
-
 @app.post("/predict")
 async def predict(file: UploadFile = File(...)):
     
