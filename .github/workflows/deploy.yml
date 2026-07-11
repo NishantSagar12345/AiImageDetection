@@ -58,7 +58,7 @@ jobs:
             echo "Deploying backend..."
             cd Backend
             docker compose down
-            docker system prune -f
+            docker system prune -af
             docker builder prune -f
             docker compose up -d --build
 
