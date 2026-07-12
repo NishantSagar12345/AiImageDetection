@@ -115,7 +115,7 @@ function App() {
             ) : result ? (
               <>
                 <div className={`prediction-card ${isFake ? "fake" : "real"}`}>
-                  <span className="prediction-label">Prediction</span>
+                  <span className="prediction-label">Deep learning model Prediction</span>
                   <h2>{result.prediction}</h2>
                   <p>{(result.confidence * 100).toFixed(2)}% confidence</p>
                 </div>
