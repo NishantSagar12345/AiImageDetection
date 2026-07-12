@@ -76,7 +76,7 @@ Interpret the heatmap using the following priority:
 Base the explanation only on the strongest red and bright yellow regions. Mention at most the two most strongly highlighted regions. Ignore green and blue regions unless no stronger activations exist. If only part of an object is highlighted, describe only that highlighted part.
 
 Important rules:
-• Base the explanation only on information visible in the Grad-CAM heatmap and the corresponding regions in the original image.
+• Base the explanation only on information visible in the Grad-CAM heatmap.
 • The Grad-CAM heatmap indicates where the classifier focused its attention. It does not explain the model's reasoning.
 • Explain that the highlighted regions may have influenced the prediction.
 • Do not identify important regions from the colours of the original image.
