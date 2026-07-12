@@ -63,16 +63,22 @@ Prediction: {prediction}
 Real probability: {real_prob:.3f}
 AI-generated probability: {fake_prob:.3f}
 
-Compare Image 1 and Image 2. Identify the actual image regions highlighted by the heatmap.
-Do not speculate about specific visual artefacts or claim that certain features are characteristic of AI-generated images unless they are directly observable. Base the explanation only on the highlighted regions in the Grad-CAM heatmap and describe them as areas that may have influenced the classifier's decision.
-Explain why these specific regions may have contributed to the detector's prediction.
-Use cautious language such as "may", "could", or "might".
-Do not simply say "the highlighted regions contributed".
-Do not claim absolute proof.
-Do not state that the detector was confused, misled, or fooled.
-Interpret the Grad-CAM heatmap only as an indication of which image regions influenced the classifier's decision.
-Always include the probability percentages in the paragraph.
-Write one concise paragraph under 150 words for a non-technical user.
+Compare Image 1 and Image 2. Focus primarily on the regions with the strongest activation (red and yellow areas) in the Grad-CAM heatmap, as these represent the image regions that contributed most strongly to the classifier's prediction. Mention green or blue regions only if they provide important additional context.
+
+Important rules:
+
+• Base the explanation only on information visible in the original image and the Grad-CAM heatmap.
+• Describe only the regions that are visibly highlighted.
+• Explain that the highlighted regions may have influenced the classifier's prediction.
+• Treat Grad-CAM as evidence of model attention, not proof of the model's reasoning.
+• Do not invent reasons that cannot be directly inferred from the images.
+• Do not state that a highlighted object is "characteristic of AI-generated images."
+• Do not mention visual artefacts, lighting inconsistencies or texture abnormalities unless they are clearly visible in the original image.
+• Use cautious language such as "may", "might" or "could".
+• Include both prediction probabilities as percentages.
+• Do not explain how Grad-CAM or deep learning works.
+
+Write one concise paragraph (80–120 words) suitable for a non-technical audience.
 """
 
     try:
