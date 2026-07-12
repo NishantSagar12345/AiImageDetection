@@ -63,10 +63,9 @@ Prediction: {prediction}
 Real probability: {real_prob:.3f}
 AI-generated probability: {fake_prob:.3f}
 
-Compare Image 1 and Image 2. Identify the actual image regions highlighted by the heatmap, such as face, eyes, skin, hair, background, clothing, edges, lighting, objects, or textures.
-
+Compare Image 1 and Image 2. Identify the actual image regions highlighted by the heatmap.
+Do not speculate about specific visual artefacts or claim that certain features are characteristic of AI-generated images unless they are directly observable. Base the explanation only on the highlighted regions in the Grad-CAM heatmap and describe them as areas that may have influenced the classifier's decision.
 Explain why these specific regions may have contributed to the detector's prediction.
-
 Use cautious language such as "may", "could", or "might".
 Do not simply say "the highlighted regions contributed".
 Do not claim absolute proof.
