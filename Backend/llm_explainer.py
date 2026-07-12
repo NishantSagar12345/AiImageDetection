@@ -63,23 +63,30 @@ Prediction: {prediction}
 Real probability: {real_prob:.3f}
 AI-generated probability: {fake_prob:.3f}
 
-Compare Image 1 and Image 2. Focus primarily on the regions with the strongest activation (red and yellow areas) in the Grad-CAM heatmap, as these represent the image regions that contributed most strongly to the classifier's prediction. Mention green or blue regions only if they provide important additional context.
+Focus primarily on Image 2 (the Grad-CAM heatmap). Treat the heatmap as the primary source of information.
+
+Use Image 1 only as a reference to identify the objects or regions that correspond to the highlighted areas in the heatmap. Do not base your explanation on the colours, appearance or composition of the original image unless they directly overlap with the highlighted regions in the heatmap.
+
+Interpret the heatmap using the following priority:
+• Red = highest importance
+• Bright yellow = high importance
+• Green = moderate importance
+• Blue = low importance
+
+Base the explanation only on the strongest red and bright yellow regions. Mention at most the two most strongly highlighted regions. Ignore green and blue regions unless no stronger activations exist. If only part of an object is highlighted, describe only that highlighted part.
 
 Important rules:
-
-• Base the explanation only on information visible in the original image and the Grad-CAM heatmap.
-• Describe only the regions that are visibly highlighted.
-• Explain that the highlighted regions may have influenced the classifier's prediction.
-• Treat Grad-CAM as evidence of model attention, not proof of the model's reasoning.
+• Base the explanation only on information visible in the Grad-CAM heatmap and the corresponding regions in the original image.
+• The Grad-CAM heatmap indicates where the classifier focused its attention. It does not explain the model's reasoning.
+• Explain that the highlighted regions may have influenced the prediction.
+• Do not identify important regions from the colours of the original image.
 • Do not invent reasons that cannot be directly inferred from the images.
-• Do not state that a highlighted object is "characteristic of AI-generated images."
-• Do not mention visual artefacts, lighting inconsistencies or texture abnormalities unless they are clearly visible in the original image.
+• Do not state that any object is characteristic of AI-generated images.
+• Do not speculate about lighting, textures, shadows or visual artefacts unless they are clearly visible within the strongest highlighted regions.
 • Use cautious language such as "may", "might" or "could".
 • Include both prediction probabilities as percentages.
-• Do not explain how Grad-CAM or deep learning works.
 
-Write one concise paragraph (80–120 words) suitable for a non-technical audience.
-"""
+Write one concise paragraph (80–120 words) suitable for a non-technical audience."""
 
     try:
 
