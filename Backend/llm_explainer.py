@@ -83,6 +83,7 @@ Important rules:
 • Do not invent reasons that cannot be directly inferred from the images.
 • Do not state that any object is characteristic of AI-generated images.
 • Do not speculate about lighting, textures, shadows or visual artefacts unless they are clearly visible within the strongest highlighted regions.
+• If the highlighted region in the heatmap is in the background talk about it also.
 • Use cautious language such as "may", "might" or "could".
 • Include both prediction probabilities as percentages.
 
