@@ -70,7 +70,7 @@ function App() {
           <h1>DeepCheck AI</h1>
           <p>
             AI image authenticity analysis with Deep Learning and
-            GPT-4o mini's reasoning.
+            GPT-4o's reasoning.
           </p>
         </header>
 
