@@ -110,7 +110,7 @@ function App() {
               <div className="loading-box">
                 <div className="spinner"></div>
                 <h2>DeepCheck is analysing...</h2>
-                <p>Running Deep Learning prediction, Grad-CAM, and GPT4o-mini explanation.</p>
+                <p>Running Deep Learning prediction, Grad-CAM, and GPT4o explanation.</p>
               </div>
             ) : result ? (
               <>
