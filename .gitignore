@@ -18,9 +18,6 @@ disvenv/
 Backend/uploads/
 Backend/models/
 Backend/gradcam/
-# Logs
-*.log
-
 
 # ======================
 # Node / React
@@ -30,11 +27,6 @@ Frontend/ai-image-detector/build/
 Frontend/ai-image-detector/dist/
 
 # npm
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-pnpm-debug.log*
 
 deepcheck-key.pem
-
 dist/

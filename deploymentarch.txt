@@ -81,7 +81,7 @@ Backend/.env
 Example:
 
 ```text
-GROQ_API_KEY=xxxxxxxxxxxxxxxx
+OPENAI_API_KEY=xxxxxxxxxxxxxxxx
 ```
 
 ---

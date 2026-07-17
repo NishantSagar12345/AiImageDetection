@@ -1,8 +1,6 @@
 import torch
 import torch.nn as nn
 from transformers import AutoModel
-
-
 class SigLIPDetector(nn.Module):
     def __init__(self, model_name="google/siglip-base-patch16-224"):
         super().__init__()

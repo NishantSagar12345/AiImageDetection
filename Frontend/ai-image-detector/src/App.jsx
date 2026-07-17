@@ -10,7 +10,7 @@ function App() {
   const [gradcamUrl, setGradcamUrl] = useState("");
   const [result, setResult] = useState(null);
   const [loading, setLoading] = useState(false);
-
+  const [showInfo, setShowInfo] = useState(false);
   const handleImageChange = (e) => {
     const selectedFile = e.target.files[0];
 
@@ -65,6 +65,13 @@ function App() {
 
   return (
     <div className="page">
+      <button
+  className="info-btn"
+  onClick={() => setShowInfo(true)}
+  aria-label="About DeepCheck"
+>
+  Help?
+</button>
       <div className="container">
         <header className="hero">
           <h1>DeepCheck AI</h1>
@@ -179,6 +186,55 @@ function App() {
             )}
           </section>
         </main>
+        {showInfo && (
+  <div
+    className="modal-overlay"
+    onClick={() => setShowInfo(false)}
+  >
+    <div
+      className="info-modal"
+      onClick={(e) => e.stopPropagation()}
+    >
+      <button
+        className="close-btn"
+        onClick={() => setShowInfo(false)}
+      >
+        ✕
+      </button>
+
+      <h2>About DeepCheck AI</h2>
+
+      <p>
+        DeepCheck AI is an explainable AI image detection system developed
+        as part of an MSc Artificial Intelligence research project.
+      </p>
+
+      <h3>Features</h3>
+
+      <ul>
+        <li>Deep Learning image classification</li>
+        <li>Grad-CAM visual explanations</li>
+        <li>GPT-4o reasoning for prediction interpretation</li>
+        <li>Confidence scores and probability visualization</li>
+      </ul>
+
+      <h3>How it works</h3>
+
+      <ol>
+        <li>Upload an image.</li>
+        <li>The model predicts whether it is AI-generated or real.</li>
+        <li>Grad-CAM highlights influential image regions.</li>
+        <li>GPT-4o provides a natural language explanation.</li>
+      </ol>
+
+      <p className="modal-note">
+        This tool is intended for research and educational purposes. AI
+        detection is probabilistic and should not be considered absolute proof
+        of authenticity.
+      </p>
+    </div>
+  </div>
+)}
         <footer className="footer">
   <div className="footer-content">
     <div className="footer-left">
