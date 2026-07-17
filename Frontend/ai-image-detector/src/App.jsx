@@ -70,7 +70,7 @@ function App() {
   onClick={() => setShowInfo(true)}
   aria-label="About DeepCheck"
 >
-  Help?
+  Help
 </button>
       <div className="container">
         <header className="hero">
