@@ -111,7 +111,69 @@ function App() {
   const isFake = result?.prediction?.toLowerCase().includes("ai");
 
   return (
-    
+    <>
+    {/* Fixed top-left button */}
+    <button
+      type="button"
+      className="samples-btn"
+      onClick={() => setShowSamples(true)}
+      aria-label="Open sample images"
+    >
+      <span className="samples-icon">🖼️</span>
+      <span>Images</span>
+    </button>
+
+    {/* Fixed top-right button */}
+    <button
+      type="button"
+      className="info-btn"
+      onClick={() => setShowInfo(true)}
+      aria-label="About DeepCheck"
+    >
+      Help
+    </button>
+
+    {/* Sample image modal */}
+    {showSamples && (
+      <div
+        className="sample-overlay"
+        onClick={() => setShowSamples(false)}
+      >
+        <div
+          className="sample-modal"
+          onClick={(e) => e.stopPropagation()}
+        >
+          <button
+            type="button"
+            className="sample-close-btn"
+            onClick={() => setShowSamples(false)}
+            aria-label="Close sample images"
+          >
+            ×
+          </button>
+
+          <h2>Sample Images</h2>
+
+          <p className="sample-description">
+            Select an image to test DeepCheck AI.
+          </p>
+
+          <div className="sample-grid">
+            {sampleImages.map((sample) => (
+              <button
+                type="button"
+                className="sample-card"
+                key={sample.url}
+                onClick={() => selectSampleImage(sample)}
+              >
+                <img src={sample.url} alt={sample.name} />
+                <span>{sample.name}</span>
+              </button>
+            ))}
+          </div>
+        </div>
+      </div>
+    )}
     <div className="page">
       <button
       className="samples-btn"
@@ -170,7 +232,7 @@ function App() {
 </button>
       <div className="container">
         <header className="hero">
-          <h1>DeepCheck AI</h1>
+          <h1>DeepCheck</h1>
           <p>
             AI image authenticity analysis with Deep Learning and
             GPT-4o's reasoning.
@@ -362,6 +424,7 @@ function App() {
 </footer>
       </div>
     </div>
+      </>
   );
 }
 
