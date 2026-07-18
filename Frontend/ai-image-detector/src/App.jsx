@@ -11,6 +11,53 @@ function App() {
   const [result, setResult] = useState(null);
   const [loading, setLoading] = useState(false);
   const [showInfo, setShowInfo] = useState(false);
+  const [showSamples, setShowSamples] = useState(false);
+  const sampleImages = [
+  {
+    name: "Real Sample 1",
+    url: "/sample-images/real-sample-1.jpg",
+  },
+  {
+    name: "Real Sample 2",
+    url: "/sample-images/real-sample-2.jpg",
+  },
+  {
+    name: "AI Sample 1",
+    url: "/sample-images/ai-sample-1.png",
+  },
+  {
+    name: "AI Sample 2",
+    url: "/sample-images/ai-sample-2.jpg",
+  },
+];
+  const selectSampleImage = async (sample) => {
+  try {
+    const response = await fetch(sample.url);
+
+    if (!response.ok) {
+      throw new Error("Could not load sample image.");
+    }
+
+    const blob = await response.blob();
+
+    const sampleFile = new File(
+      [blob],
+      sample.url.split("/").pop(),
+      {
+        type: blob.type || "image/jpeg",
+      }
+    );
+
+    setFile(sampleFile);
+    setPreviewUrl(sample.url);
+    setGradcamUrl("");
+    setResult(null);
+    setShowSamples(false);
+  } catch (error) {
+    console.error(error);
+    alert("Could not load the selected sample image.");
+  }
+};
   const handleImageChange = (e) => {
     const selectedFile = e.target.files[0];
 
@@ -64,7 +111,56 @@ function App() {
   const isFake = result?.prediction?.toLowerCase().includes("ai");
 
   return (
+    
     <div className="page">
+      <button
+      className="samples-btn"
+      onClick={() => setShowSamples(true)}
+      aria-label="Open sample images"
+    >
+      <span className="samples-icon">🖼️</span>
+      <span>Images</span>
+    </button>
+
+    {showSamples && (
+      <div
+        className="sample-overlay"
+        onClick={() => setShowSamples(false)}
+      >
+        <div
+          className="sample-modal"
+          onClick={(e) => e.stopPropagation()}
+        >
+          <button
+            className="sample-close-btn"
+            onClick={() => setShowSamples(false)}
+            aria-label="Close sample images"
+          >
+            ×
+          </button>
+
+          <h2>Sample Images</h2>
+
+          <p className="sample-description">
+            Select an image to test DeepCheck AI.
+          </p>
+
+          <div className="sample-grid">
+            {sampleImages.map((sample) => (
+              <button
+                type="button"
+                className="sample-card"
+                key={sample.url}
+                onClick={() => selectSampleImage(sample)}
+              >
+                <img src={sample.url} alt={sample.name} />
+                <span>{sample.name}</span>
+              </button>
+            ))}
+          </div>
+        </div>
+      </div>
+    )}
       <button
   className="info-btn"
   onClick={() => setShowInfo(true)}
