@@ -364,7 +364,7 @@ function App() {
 
       <p>
         DeepCheck AI is an explainable AI image detection system developed
-        as part of an MSc Artificial Intelligence research project.
+        by Nishant Sagar Pandey.
       </p>
 
       <h3>Features</h3>
@@ -379,7 +379,7 @@ function App() {
       <h3>How it works</h3>
 
       <ol>
-        <li>Upload an image.</li>
+        <li>Upload an image or select an image form image button.</li>
         <li>The model predicts whether it is AI-generated or real.</li>
         <li>Grad-CAM highlights influential image regions.</li>
         <li>GPT-4o provides a natural language explanation.</li>
