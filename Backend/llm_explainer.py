@@ -117,87 +117,63 @@ def explain_gradcam_with_llm(
         prompt = f"""
 You are analysing the output of an AI-generated image detector.
 
-You will receive two spatially aligned images in this exact order:
+You will receive two spatially aligned images.
 
-Image 1: The original image.
-Image 2: An internal attention guide derived from Grad-CAM.
+Image 1: Original image.
+Image 2: Internal Grad-CAM attention guide.
 
-Both images have the same dimensions. A location in Image 2 corresponds
-to the same location in Image 1.
+Both images have identical dimensions, so each location in Image 2 corresponds to the same location in Image 1.
 
-Model results:
+Prediction:
+{prediction}
 
-Prediction: {prediction}
 Real probability: {real_percentage:.1f}%
 AI-generated probability: {fake_percentage:.1f}%
 
-Your task is to explain which image regions may have received the
-strongest attention from the classifier.
+Task:
 
-PRIMARY EVIDENCE RULE
+Use Image 2 only to identify the one or two strongest highlighted regions.
 
-Use Image 2 as the only source for determining which regions received
-the strongest classifier attention.
+Use Image 1 only to identify the object part or background directly underneath those highlighted regions.
 
-Image 2 is an internal localisation guide. It is NOT shown to the user.
+Rules:
 
-Use Image 1 only to identify the object, object part or background
-located underneath the highlighted locations indicated by Image 2.
+- Never use Image 1 to determine attention.
+- Describe only what is directly underneath the highlighted region.
+- Never expand to nearby objects, whole people, groups or associated objects.
+- Ignore tiny isolated highlighted regions that appear to be noise.
+- If only one meaningful highlighted region exists, describe only that region.
+- If the highlighted region is on the background, identify only that background element.
 
-Do not determine important regions using colours, appearance,
-composition or visual features from Image 1.
+Limitations:
 
-Instructions:
+- Grad-CAM indicates where the classifier focused, not why.
+- Highlighted regions do not prove an image is real or AI-generated.
+- Do not speculate beyond the highlighted region.
+- Use cautious words such as "may", "might" or "could".
+- Include both probabilities.
 
-1. Identify at most the two most prominent highlighted regions indicated
-   by Image 2.
-2. Match those regions to the same locations in Image 1.
-3. Describe only the object part or background underneath those
-   locations.
-4. If only part of an object is highlighted, describe only that part.
-5. Mention a background region only if it is one of the strongest
-   highlighted locations.
-6. Ignore insignificant isolated highlighted pixels.
-7. Do not describe unrelated objects or regions from Image 1.
-8. Do not infer classifier attention from natural colours in Image 1.
+Output rules:
 
-Important limitations:
+The user only sees the coloured transparent Grad-CAM overlay.
 
-- Grad-CAM indicates where the classifier focused, not why it made its
-  decision.
-- The highlighted regions do not prove that the image is real or
-  AI-generated.
-- Do not state that an object is characteristic of AI-generated images.
-- Do not invent visual reasons that cannot be directly inferred from
-  the images.
-- Do not speculate about lighting, textures, shadows, reflections or
-  visual artefacts unless they are clearly visible in one of the
-  highlighted regions.
-- Use cautious terms such as "may", "might" and "could".
-- Include both probabilities as percentages.
+Never mention:
+- Image 1 or Image 2
+- attention guide
+- mask
+- white or black regions
+- internal processing
 
-USER-FACING OUTPUT RULE
+Instead, refer to them only as:
+- highlighted region
+- highlighted area
+- Grad-CAM highlighted region
 
-The user will only see the original image together with a coloured
-transparent Grad-CAM overlay.
-
-Therefore:
-
-- Never mention Image 1 or Image 2.
-- Never mention an internal attention guide or mask.
-- Never mention white regions, black regions or pixels.
-- Never mention how the highlighted regions were obtained.
-- Refer to them only as "highlighted regions", "highlighted areas" or
-  "Grad-CAM highlighted regions".
-- Write naturally, as if the user is looking at the coloured Grad-CAM
-  overlay.
-
-Write exactly one concise paragraph between 80 and 120 words for a
-non-technical audience.
+Write one paragraph of 80–120 words for a non-technical audience.
 """.strip()
 
         response = client.chat.completions.create(
-            model="gpt-4o",
+            model="gpt-4.1",
             messages=[
                 {
                     "role": "user",
