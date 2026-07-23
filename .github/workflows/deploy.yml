@@ -49,8 +49,8 @@ jobs:
             cd ~/AiImageDetection
 
             echo "Updating repository..."
-            git fetch origin main
-            git reset --hard origin/main
+            git fetch origin 
+            git reset --hard origin/old-version
             
             # Remove the Kaggle folder so it doesn't live on the EC2 instance
             echo "Removing Kaggle notebook files from production..."
