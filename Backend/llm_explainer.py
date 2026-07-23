@@ -132,7 +132,7 @@ AI-generated probability: {fake_percentage:.1f}%
 
 Task:
 
-Use Image 2 only to identify the one or two strongest highlighted regions.
+Use Image 2 only to identify the two strongest highlighted regions.
 
 Use Image 1 only to identify the object part or background directly underneath those highlighted regions.
 
@@ -140,10 +140,10 @@ Rules:
 
 - Never use Image 1 to determine attention.
 - Describe only what is directly underneath the highlighted region.
-- Never expand to nearby objects, whole people, groups or associated objects.
 - Ignore tiny isolated highlighted regions that appear to be noise.
 - If only one meaningful highlighted region exists, describe only that region.
 - If the highlighted region is on the background, identify only that background element.
+
 
 Limitations:
 
