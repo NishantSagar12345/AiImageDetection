@@ -228,7 +228,7 @@ function App() {
   onClick={() => setShowInfo(true)}
   aria-label="About DeepCheck"
 >
-  help
+  Help
 </button>
       <div className="container">
         <header className="hero">
@@ -379,7 +379,7 @@ function App() {
       <h3>How it works</h3>
 
       <ol>
-        <li>Upload an image or select an image form image button.</li>
+        <li>Upload an image or select an image from the image button.</li>
         <li>The model predicts whether it is AI-generated or real.</li>
         <li>Grad-CAM highlights influential image regions.</li>
         <li>GPT-4o provides a natural language explanation.</li>

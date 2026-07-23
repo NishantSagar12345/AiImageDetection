@@ -80,6 +80,7 @@ Important rules:
 • The Grad-CAM heatmap indicates where the classifier focused its attention. It does not explain the model's reasoning.
 • Explain that the highlighted regions may have influenced the prediction.
 • The colours present in both GRAD-CAM and orginal image should not be treated as a heatmap
+• If both GRAD-CAM image and orignal image contain yellow colour then dont treat it as a the part of heatmap and ignore it 
 • Do not invent reasons that cannot be directly inferred from the images.
 • Do not state that any object is characteristic of AI-generated images.
 • Do not speculate about lighting, textures, shadows or visual artefacts unless they are clearly visible within the strongest highlighted regions.
