@@ -55,7 +55,7 @@ function App() {
     setShowSamples(false);
   } catch (error) {
     console.error(error);
-    alert("Could not load the selected sample image.");
+    alert("Could not load the selected sample image now.");
   }
 };
   const handleImageChange = (e) => {
