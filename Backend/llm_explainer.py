@@ -11,8 +11,10 @@ load_dotenv()
 
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 
-client = OpenAI(
-    api_key=OPENAI_API_KEY
+client = (
+    OpenAI(api_key=OPENAI_API_KEY)
+    if OPENAI_API_KEY
+    else None
 )
 
 
@@ -21,14 +23,11 @@ def image_to_png_data_url(
     target_size: tuple[int, int] = (224, 224),
 ) -> str:
     """
-    Load an image, resize it to a fixed size, and convert it
-    to a base64-encoded PNG data URL.
-
-    Using the same target size for both images helps preserve
-    coordinate alignment between the original and Grad-CAM image.
+    Resize an image to a fixed size and convert it into
+    a base64-encoded PNG data URL.
     """
 
-    if not os.path.isfile(image_path):
+    if not image_path or not os.path.isfile(image_path):
         raise FileNotFoundError(
             f"Image file could not be found: {image_path}"
         )
@@ -69,17 +68,21 @@ def image_to_png_data_url(
 
 def explain_gradcam_with_llm(
     original_image_path: str,
-    gradcam_path: str,
+    attention_mask_path: str,
     prediction: str,
     real_prob: float,
     fake_prob: float,
 ) -> str:
     """
-    Generate a concise, non-technical explanation of the
-    strongest Grad-CAM regions.
+    Generate a concise explanation using:
+
+    Image 1: Original image
+    Image 2: Binary high-attention mask
+
+    The mask is the only source used to locate important regions.
     """
 
-    if not OPENAI_API_KEY:
+    if client is None:
         return (
             "LLM explanation unavailable because "
             "OPENAI_API_KEY is not configured."
@@ -87,7 +90,7 @@ def explain_gradcam_with_llm(
 
     required_files = {
         "original image": original_image_path,
-        "Grad-CAM image": gradcam_path,
+        "attention mask": attention_mask_path,
     }
 
     for description, file_path in required_files.items():
@@ -98,18 +101,16 @@ def explain_gradcam_with_llm(
             )
 
     try:
-        # Both images are converted to exactly 224 × 224.
         original_data_url = image_to_png_data_url(
             image_path=original_image_path,
             target_size=(224, 224),
         )
 
-        gradcam_data_url = image_to_png_data_url(
-            image_path=gradcam_path,
+        attention_mask_data_url = image_to_png_data_url(
+            image_path=attention_mask_path,
             target_size=(224, 224),
         )
 
-        # Input probabilities are between 0 and 1.
         real_percentage = real_prob * 100
         fake_percentage = fake_prob * 100
 
@@ -119,10 +120,10 @@ You are analysing the output of an AI-generated image detector.
 You will receive two spatially aligned images in this exact order:
 
 Image 1: The original image.
-Image 2: The Grad-CAM heatmap overlay of the same image.
+Image 2: An internal attention guide derived from Grad-CAM.
 
-Both images have the same dimensions. A location in Image 2 therefore
-corresponds to the same location in Image 1.
+Both images have the same dimensions. A location in Image 2 corresponds
+to the same location in Image 1.
 
 Model results:
 
@@ -130,69 +131,66 @@ Prediction: {prediction}
 Real probability: {real_percentage:.1f}%
 AI-generated probability: {fake_percentage:.1f}%
 
-Your task is to explain which regions may have received the strongest
-attention from the classifier.
+Your task is to explain which image regions may have received the
+strongest attention from the classifier.
 
 PRIMARY EVIDENCE RULE
 
-Use Image 2 as the only source for determining where the classifier
-focused.
+Use Image 2 as the only source for determining which regions received
+the strongest classifier attention.
 
-Use Image 1 only to identify the object, object part, or background area
-located underneath a highlighted region.
+Image 2 is an internal localisation guide. It is NOT shown to the user.
 
-Do not use the colours, appearance, or composition of Image 1 to decide
-which areas are important.
+Use Image 1 only to identify the object, object part or background
+located underneath the highlighted locations indicated by Image 2.
 
-Interpret genuine Grad-CAM activation as a continuous heatmap gradient:
-
-- Red: strongest activation
-- Bright yellow next to red: strong activation
-- Green: moderate activation
-- Blue: weak activation
+Do not determine important regions using colours, appearance,
+composition or visual features from Image 1.
 
 Instructions:
 
-1. Identify at most the two strongest red regions in Image 2.
-2. If no red region exists, identify the strongest bright-yellow region
-   that forms part of a visible Grad-CAM gradient.
-3. Use Image 1 only to name what lies underneath those exact regions.
+1. Identify at most the two most prominent highlighted regions indicated
+   by Image 2.
+2. Match those regions to the same locations in Image 1.
+3. Describe only the object part or background underneath those
+   locations.
 4. If only part of an object is highlighted, describe only that part.
-5. Mention a background region when it contains a strong activation.
-6. Ignore green and blue regions when red or valid bright-yellow regions
-   are present.
-7. Do not describe any part of Image 1 that does not correspond to a
-   strong activation in Image 2.
-
-COLOUR-SEPARATION RULE
-
-A naturally coloured object in Image 1 must not be treated as a Grad-CAM
-activation merely because the same colour remains visible in Image 2.
-
-Ignore an isolated yellow area when:
-
-- it appears yellow in both Image 1 and Image 2; and
-- it is not part of a surrounding Grad-CAM gradient containing nearby
-  red, green, or blue activation colours.
-
-Treat such isolated yellow as part of the original image rather than as
-heatmap evidence.
+5. Mention a background region only if it is one of the strongest
+   highlighted locations.
+6. Ignore insignificant isolated highlighted pixels.
+7. Do not describe unrelated objects or regions from Image 1.
+8. Do not infer classifier attention from natural colours in Image 1.
 
 Important limitations:
 
-- Grad-CAM shows where the classifier focused, not why it made its
+- Grad-CAM indicates where the classifier focused, not why it made its
   decision.
-- Say that the identified regions may, might, or could have influenced
-  the prediction.
-- Do not claim that highlighted regions prove the image is real or
+- The highlighted regions do not prove that the image is real or
   AI-generated.
-- Do not say that an object is characteristic of AI-generated images.
-- Do not invent reasons that cannot be directly inferred from the
-  images.
-- Do not speculate about lighting, textures, shadows, reflections, or
-  visual artefacts unless they are clearly visible inside the strongest
-  highlighted region.
-- Include both prediction probabilities as percentages.
+- Do not state that an object is characteristic of AI-generated images.
+- Do not invent visual reasons that cannot be directly inferred from
+  the images.
+- Do not speculate about lighting, textures, shadows, reflections or
+  visual artefacts unless they are clearly visible in one of the
+  highlighted regions.
+- Use cautious terms such as "may", "might" and "could".
+- Include both probabilities as percentages.
+
+USER-FACING OUTPUT RULE
+
+The user will only see the original image together with a coloured
+transparent Grad-CAM overlay.
+
+Therefore:
+
+- Never mention Image 1 or Image 2.
+- Never mention an internal attention guide or mask.
+- Never mention white regions, black regions or pixels.
+- Never mention how the highlighted regions were obtained.
+- Refer to them only as "highlighted regions", "highlighted areas" or
+  "Grad-CAM highlighted regions".
+- Write naturally, as if the user is looking at the coloured Grad-CAM
+  overlay.
 
 Write exactly one concise paragraph between 80 and 120 words for a
 non-technical audience.
@@ -212,8 +210,8 @@ non-technical audience.
                             "type": "text",
                             "text": (
                                 "Image 1: Original image. "
-                                "Use it only to identify what is located "
-                                "under the highlighted Grad-CAM regions."
+                                "Use this only to identify what lies "
+                                "underneath the white mask regions."
                             ),
                         },
                         {
@@ -226,15 +224,15 @@ non-technical audience.
                         {
                             "type": "text",
                             "text": (
-                                "Image 2: Grad-CAM heatmap overlay. "
-                                "Use this image to locate the strongest "
-                                "classifier attention."
+                                "Image 2: Black-and-white attention "
+                                "mask. Use only the white regions to "
+                                "locate strong classifier attention."
                             ),
                         },
                         {
                             "type": "image_url",
                             "image_url": {
-                                "url": gradcam_data_url,
+                                "url": attention_mask_data_url,
                                 "detail": "high",
                             },
                         },

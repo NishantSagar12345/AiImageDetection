@@ -1,7 +1,10 @@
+import os
+
 import torch
 from PIL import Image
+
 from gradcam_utils import generate_gradcam
-import os
+
 
 def predict_image(
     image_path,
@@ -9,7 +12,8 @@ def predict_image(
     processor,
     device,
     gradcam_path=None,
-    threshold=0.5
+    attention_mask_path=None,
+    threshold=0.5,
 ):
     model.eval()
 
@@ -17,7 +21,7 @@ def predict_image(
 
     inputs = processor(
         images=image,
-        return_tensors="pt"
+        return_tensors="pt",
     )
 
     pixel_values = inputs["pixel_values"].to(device)
@@ -40,17 +44,28 @@ def predict_image(
         "prediction": prediction,
         "confidence": round(confidence, 4),
         "real_probability": round(real_prob, 4),
-        "fake_probability": round(fake_prob, 4)
+        "fake_probability": round(fake_prob, 4),
     }
 
     if gradcam_path is not None:
+        if attention_mask_path is None:
+            raise ValueError(
+                "attention_mask_path is required when "
+                "gradcam_path is provided."
+            )
+
         generate_gradcam(
             image_path=image_path,
             model=model,
             processor=processor,
             device=device,
-            save_path=gradcam_path
+            save_path=gradcam_path,
+            mask_save_path=attention_mask_path,
         )
 
-        result["gradcam_url"] = f"/gradcam/{os.path.basename(gradcam_path)}"
+        result["gradcam_url"] = (
+            f"/gradcam/{os.path.basename(gradcam_path)}"
+        )
+
     return result
+
