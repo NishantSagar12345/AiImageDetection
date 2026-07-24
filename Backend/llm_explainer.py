@@ -119,8 +119,6 @@ Write one concise paragraph (80–120 words) suitable for a non-technical audien
                     ]
                 }
             ],
-
-            temperature=0.2,
             max_completion_tokens=200
 
         )
