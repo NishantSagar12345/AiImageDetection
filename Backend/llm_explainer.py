@@ -99,6 +99,7 @@ def explain_gradcam_with_llm(
                 "LLM explanation unavailable because the "
                 f"{description} could not be found."
             )
+     
 
     try:
         original_data_url = image_to_png_data_url(
@@ -115,65 +116,61 @@ def explain_gradcam_with_llm(
         fake_percentage = fake_prob * 100
 
         prompt = f"""
-You are analysing the output of an AI-generated image detector.
+You are explaining the output of an AI-generated image detector.
 
-You will receive two spatially aligned images.
+You will receive two aligned images:
 
-Image 1: Original image.
-Image 2: Internal Grad-CAM attention guide.
+• Image 1: Original image
+• Image 2: Internal Grad-CAM attention guide
 
-Both images have identical dimensions, so each location in Image 2 corresponds to the same location in Image 1.
+Every location in Image 2 corresponds exactly to the same location in Image 1.
 
-Prediction:
-{prediction}
+Prediction: {prediction}
 
 Real probability: {real_percentage:.1f}%
 AI-generated probability: {fake_percentage:.1f}%
 
-Task:
+Task
 
-Use Image 2 only to identify the two strongest highlighted regions.
+Use Image 2 only to locate the one or two strongest highlighted regions.
 
-Use Image 1 only to identify the object part or background directly underneath those highlighted regions.
+Use Image 1 only to identify the object part or background directly underneath those regions.
 
-Rules:
+Rules
 
 - Never use Image 1 to determine attention.
-- Describe only what is directly underneath the highlighted region.
-- Ignore tiny isolated highlighted regions that appear to be noise.
+- Describe only the highlighted object part or background.
+- If only part of an object is highlighted, describe only that part.
+- Ignore small isolated highlights that appear to be noise.
 - If only one meaningful highlighted region exists, describe only that region.
-- If the highlighted region is on the background, identify only that background element.
+- Do not describe unrelated objects or nearby regions.
 
+Important
 
-Limitations:
-
-- Grad-CAM indicates where the classifier focused, not why.
-- Highlighted regions do not prove an image is real or AI-generated.
-- Do not speculate beyond the highlighted region.
-- Use cautious words such as "may", "might" or "could".
+- Grad-CAM shows where the classifier focused, not why.
+- The highlighted regions may have influenced the prediction.
+- Do not speculate beyond the highlighted regions.
+- Use cautious language such as "may", "might", or "could".
 - Include both probabilities.
 
-Output rules:
+Output
 
 The user only sees the coloured transparent Grad-CAM overlay.
 
-Never mention:
+Do not mention:
 - Image 1 or Image 2
 - attention guide
 - mask
-- white or black regions
 - internal processing
 
-Instead, refer to them only as:
-- highlighted region
-- highlighted area
-- Grad-CAM highlighted region
+Instead, refer only to "highlighted regions", "highlighted areas", or "Grad-CAM highlighted regions".
 
-Write one paragraph of 80–120 words for a non-technical audience.
+Write one paragraph (80–120 words) for a non-technical audience
 """.strip()
 
         response = client.chat.completions.create(
             model="gpt-5.6-luna",
+            reasoning_effort="none",
             messages=[
                 {
                     "role": "user",
@@ -215,12 +212,12 @@ Write one paragraph of 80–120 words for a non-technical audience.
                     ],
                 }
             ],
-            
-            max_completion_tokens=220,
+           
+            max_completion_tokens=200,
         )
-
+        
         explanation = response.choices[0].message.content
-
+        print("The response is ",response)
         if not explanation:
             return (
                 "LLM explanation unavailable because "
