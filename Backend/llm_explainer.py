@@ -173,7 +173,7 @@ Write one paragraph of 80–120 words for a non-technical audience.
 """.strip()
 
         response = client.chat.completions.create(
-            model="gpt-4.1",
+            model="gpt-5.6-luna",
             messages=[
                 {
                     "role": "user",
