@@ -331,7 +331,7 @@ function App() {
 
                 {result.llm_explanation && (
                   <div className="llm-box">
-                    <h3>GPT-4o Explanation</h3>
+                    <h3>GPT-4.1 Explanation</h3>
                     <p>{result.llm_explanation}</p>
                   </div>
                 )}
