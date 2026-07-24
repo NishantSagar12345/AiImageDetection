@@ -215,7 +215,7 @@ Write one paragraph of 80–120 words for a non-technical audience.
                     ],
                 }
             ],
-            temperature=0.1,
+            
             max_completion_tokens=220,
         )
 
