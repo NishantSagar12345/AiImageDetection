@@ -94,8 +94,8 @@ Write one concise paragraph (80–120 words) suitable for a non-technical audien
 
         response = client.chat.completions.create(
 
-            model="gpt-4.1",
-
+            model="gpt-5.6-luna",
+            reasoning_effort="none",
             messages=[
                 {
                     "role": "user",
