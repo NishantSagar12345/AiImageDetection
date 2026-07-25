@@ -120,7 +120,7 @@ You are explaining the output of an AI-generated image detector for a non-techni
 
 You will receive two spatially aligned images in order:
 1. Original image
-2. Internal Grad-CAM guide (bright active areas show focus, dark areas should be ignored)
+2. Internal Grad-CAM guide (white areas indicate classifier focus; black areas should be ignored)
 
 Both images have identical dimensions, so every location in the second image corresponds exactly to the same location in the first image.
 
@@ -129,15 +129,15 @@ Real probability: {real_percentage:.1f}%
 AI-generated probability: {fake_percentage:.1f}%
 
 Task:
-- Step 1: Use the second image ONLY to locate the 1 or 2 main active regions. Ignore small isolated noise spots.
+- Step 1: Use the second image ONLY to locate the 1 or 2 main white areas. Ignore small isolated noise spots.
 - Step 2: Use the first image ONLY to identify the specific object part or background directly underneath those exact locations.
 
 Rules:
 - Never use the first image alone to determine where focus is located.
-- Describe only what is directly covered by the active focal areas.
+- Describe only what is directly covered by the white areas.
 - If only part of an object is covered, describe only that specific part.
-- Do not describe or mention unrelated objects outside the active areas.
-- Do not speculate beyond what is directly visible in the focal areas.
+- Do not describe or mention unrelated objects outside the white areas.
+- Do not speculate beyond what is directly visible in those areas.
 - Use cautious language such as "may", "might", or "could".
 - Always include both the real probability and AI-generated probability in your explanation.
 
@@ -148,7 +148,7 @@ Forbidden vocabulary (DO NOT MENTION):
 - "Image 1" or "Image 2"
 - "attention guide" or "attention map"
 - "mask"
-- "white regions" or "black regions"
+- "white areas" or "black areas"
 - "internal processing"
 
 Allowed vocabulary:
