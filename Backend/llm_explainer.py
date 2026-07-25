@@ -116,62 +116,46 @@ def explain_gradcam_with_llm(
         fake_percentage = fake_prob * 100
 
         prompt = f"""
-You are explaining the output of an AI-generated image detector.
+You are explaining the output of an AI-generated image detector for a non-technical audience.
 
-You will receive two aligned images:
+You will receive two spatially aligned images in order:
+1. Original image
+2. Internal Grad-CAM guide (bright active areas show focus, dark areas should be ignored)
 
-• Image 1: Original image
-• Image 2: Internal Grad-CAM attention guide.
-
-Both images have identical dimensions, so every location in Image 2 corresponds exactly to the same location in Image 1.
-
-In Image 2:
-- White regions indicate the strongest classifier attention.
-- Black regions indicate areas that should be ignored.
+Both images have identical dimensions, so every location in the second image corresponds exactly to the same location in the first image.
 
 Prediction: {prediction}
-
 Real probability: {real_percentage:.1f}%
 AI-generated probability: {fake_percentage:.1f}%
 
-Task
+Task:
+- Step 1: Use the second image ONLY to locate the 1 or 2 main active regions. Ignore small isolated noise spots.
+- Step 2: Use the first image ONLY to identify the specific object part or background directly underneath those exact locations.
 
-Use Image 2 only to locate the one or two largest meaningful white regions.
-
-Use Image 1 only to identify the object part or background directly underneath those white regions.
-
-Rules
-
-- Never use Image 1 to determine attention.
-- Describe only what is directly covered by the white regions.
-- If only part of an object is covered, describe only that part.
-- Ignore tiny isolated white regions that appear to be noise.
-- If only one meaningful white region exists, describe only that region.
-- Do not mention objects that are not directly covered by the white regions.
-
-Important
-
-- Grad-CAM shows where the classifier focused, not why.
-- The highlighted regions may have influenced the prediction.
-- Do not speculate beyond the highlighted regions.
+Rules:
+- Never use the first image alone to determine where focus is located.
+- Describe only what is directly covered by the active focal areas.
+- If only part of an object is covered, describe only that specific part.
+- Do not describe or mention unrelated objects outside the active areas.
+- Do not speculate beyond what is directly visible in the focal areas.
 - Use cautious language such as "may", "might", or "could".
-- Include both probabilities.
+- Always include both the real probability and AI-generated probability in your explanation.
 
-Output
+Output Rules:
+The user only sees a colored transparent overlay on the image.
 
-The user only sees the coloured transparent Grad-CAM overlay.
+Forbidden vocabulary (DO NOT MENTION):
+- "Image 1" or "Image 2"
+- "attention guide" or "attention map"
+- "mask"
+- "white regions" or "black regions"
+- "internal processing"
 
-Do not mention:
-- Image 1 or Image 2
-- attention guide
-- mask
-- white regions
-- black regions
-- internal processing
+Allowed vocabulary:
+Refer to focal areas ONLY as "highlighted regions", "highlighted areas", or "Grad-CAM highlighted regions".
 
-Instead, refer only to "highlighted regions", "highlighted areas", or "Grad-CAM highlighted regions".
-
-Write one paragraph (80–120 words) for a non-technical audience.
+Format:
+Write exactly one paragraph (3 to 5 sentences, 80–120 words).
 """.strip()
 
         response = client.chat.completions.create(
