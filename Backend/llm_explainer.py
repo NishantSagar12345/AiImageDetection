@@ -121,9 +121,13 @@ You are explaining the output of an AI-generated image detector.
 You will receive two aligned images:
 
 • Image 1: Original image
-• Image 2: Internal Grad-CAM attention guide
+• Image 2: Internal Grad-CAM attention guide.
 
-Every location in Image 2 corresponds exactly to the same location in Image 1.
+Both images have identical dimensions, so every location in Image 2 corresponds exactly to the same location in Image 1.
+
+In Image 2:
+- White regions indicate the strongest classifier attention.
+- Black regions indicate areas that should be ignored.
 
 Prediction: {prediction}
 
@@ -132,18 +136,18 @@ AI-generated probability: {fake_percentage:.1f}%
 
 Task
 
-Use Image 2 only to locate the one or two strongest highlighted regions.
+Use Image 2 only to locate the one or two largest meaningful white regions.
 
-Use Image 1 only to identify the object part or background directly in those regions.
+Use Image 1 only to identify the object part or background directly underneath those white regions.
 
 Rules
 
 - Never use Image 1 to determine attention.
-- Describe only the highlighted object part or background.
-- If only part of an object is highlighted, describe only that part.
-- Ignore small isolated highlights that appear to be noise.
-- If only one meaningful highlighted region exists, describe only that region.
-- Do not describe unrelated objects or nearby regions.
+- Describe only what is directly covered by the white regions.
+- If only part of an object is covered, describe only that part.
+- Ignore tiny isolated white regions that appear to be noise.
+- If only one meaningful white region exists, describe only that region.
+- Do not mention objects that are not directly covered by the white regions.
 
 Important
 
@@ -161,11 +165,13 @@ Do not mention:
 - Image 1 or Image 2
 - attention guide
 - mask
+- white regions
+- black regions
 - internal processing
 
 Instead, refer only to "highlighted regions", "highlighted areas", or "Grad-CAM highlighted regions".
 
-Write one paragraph (80–120 words) for a non-technical audience
+Write one paragraph (80–120 words) for a non-technical audience.
 """.strip()
 
         response = client.chat.completions.create(
