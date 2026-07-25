@@ -134,7 +134,7 @@ Task
 
 Use Image 2 only to locate the one or two strongest highlighted regions.
 
-Use Image 1 only to identify the object part or background directly underneath those regions.
+Use Image 1 only to identify the object part or background directly in those regions.
 
 Rules
 
