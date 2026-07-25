@@ -235,7 +235,7 @@ function App() {
           <h1>DeepCheck</h1>
           <p>
             AI image authenticity analysis with Deep Learning and
-            GPT-5.1-Luna's reasoning.
+            GPT-5.6-Luna's reasoning.
           </p>
         </header>
 
@@ -372,7 +372,7 @@ function App() {
       <ul>
         <li>Deep Learning image classification</li>
         <li>Grad-CAM visual explanations</li>
-        <li>GPT-4.1 reasoning for prediction interpretation</li>
+        <li>GPT-5.6-Luna's reasoning for prediction interpretation</li>
         <li>Confidence scores and probability visualization</li>
       </ul>
 
@@ -382,7 +382,7 @@ function App() {
         <li>Upload an image or select an image from the image button.</li>
         <li>The model predicts whether it is AI-generated or real.</li>
         <li>Grad-CAM highlights influential image regions.</li>
-        <li>GPT-4.1 provides a natural language explanation.</li>
+        <li>GPT-5.6-Luna provides a natural language explanation.</li>
       </ol>
 
       <p className="modal-note">
