@@ -130,7 +130,7 @@ AI-generated probability: {fake_percentage:.1f}%
 
 Task:
 - Step 1: Use the second image ONLY to locate the 1 or 2 main white areas. Ignore small isolated noise spots.
-- Step 2: Use the first image ONLY to identify the specific object part or background directly underneath those exact locations.
+- Step 2: Describe only the object part or background located at the same positions in the original image.
 
 Rules:
 - Never use the first image alone to determine where focus is located.
