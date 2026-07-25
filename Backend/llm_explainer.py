@@ -129,7 +129,7 @@ Real probability: {real_percentage:.1f}%
 AI-generated probability: {fake_percentage:.1f}%
 
 Task:
-- Step 1: Use the second image ONLY to locate the 1 or 2 main white areas. Ignore small isolated noise spots.
+- Step 1: Use the second image ONLY to locate the main white areas. Ignore small isolated noise spots.
 - Step 2: Describe only the object part or background located at the same positions in the original image.
 
 Rules:
@@ -155,7 +155,7 @@ Allowed vocabulary:
 Refer to focal areas ONLY as "highlighted regions", "highlighted areas", or "Grad-CAM highlighted regions".
 
 Format:
-Write exactly one paragraph (3 to 5 sentences, 80–120 words).
+Write exactly one paragraph (5 to 7 sentences, 150 words).
 """.strip()
 
         response = client.chat.completions.create(
