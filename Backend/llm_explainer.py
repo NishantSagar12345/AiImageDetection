@@ -120,7 +120,7 @@ You are explaining the output of an AI-generated image detector for a non-techni
 
 You will receive two spatially aligned images in order:
 1. Original image
-2. Internal Grad-CAM guide (white areas indicate classifier focus; black areas should be ignored)
+2. Internal Grad-CAM guide 
 
 Both images have identical dimensions, so every location in the second image corresponds exactly to the same location in the first image.
 
@@ -135,6 +135,7 @@ Task:
 Rules:
 - Never use the first image alone to determine where focus is located.
 - Describe only what is directly covered by the white areas in the second image.
+- Do not treat black and white areas in the first image as the GradCAM's focus area.
 - If only part of an object is covered, describe only that specific part.
 - Do not describe or mention unrelated objects outside the white areas in the second image.
 - Do not speculate beyond what is directly visible in those areas.
