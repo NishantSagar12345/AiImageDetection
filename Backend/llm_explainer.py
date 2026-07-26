@@ -151,6 +151,18 @@ Forbidden vocabulary (DO NOT MENTION):
 - "mask"
 - "white areas" or "black areas"
 - "internal processing"
+Do not describe or infer:
+- texture
+- edges
+- contours
+- boundaries
+- contrast
+- lighting
+- reflections
+- shadows
+- realism
+- photographic quality
+
 
 Allowed vocabulary:
 Refer to focal areas ONLY as "highlighted regions", "highlighted areas", or "Grad-CAM highlighted regions".
