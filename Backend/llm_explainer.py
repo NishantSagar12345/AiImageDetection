@@ -129,14 +129,14 @@ Real probability: {real_percentage:.1f}%
 AI-generated probability: {fake_percentage:.1f}%
 
 Task:
-- Step 1: Use the second image ONLY to locate the main white areas. Ignore small isolated noise spots.
+- Step 1: Use the second image only to locate the main white areas. Ignore small isolated noise spots.
 - Step 2: Describe only the object part or background located at the same positions in the original image.
 
 Rules:
 - Never use the first image alone to determine where focus is located.
-- Describe only what is directly covered by the white areas.
+- Describe only what is directly covered by the white areas in the second image.
 - If only part of an object is covered, describe only that specific part.
-- Do not describe or mention unrelated objects outside the white areas.
+- Do not describe or mention unrelated objects outside the white areas in the second image.
 - Do not speculate beyond what is directly visible in those areas.
 - Use cautious language such as "may", "might", or "could".
 - Always include both the real probability and AI-generated probability in your explanation.
