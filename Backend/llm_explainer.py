@@ -137,7 +137,7 @@ Rules:
 - Describe only what is directly covered by the white areas in the second image.
 - Do not treat black and white areas in the first image as the GradCAM's focus area.
 - If only part of an object is covered, describe only that specific part.
-- Do not describe or mention unrelated objects outside the white areas in the second image.
+- Never mention an object, person, body part, or background region unless it is directly covered by the selected white areas in the second image. 
 - Do not speculate beyond what is directly visible in those areas.
 - Use cautious language such as "may", "might", or "could".
 - Always include both the real probability and AI-generated probability in your explanation.
