@@ -52,7 +52,7 @@ def generate_gradcam(
     device,
     save_path,
     mask_save_path,
-    mask_threshold=0.70,
+    mask_threshold=0.80,
 ):
     """
     Generate:
