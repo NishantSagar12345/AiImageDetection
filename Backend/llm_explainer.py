@@ -119,56 +119,57 @@ def explain_gradcam_with_llm(
 You are explaining the output of an AI-generated image detector for a non-technical audience.
 
 You will receive two spatially aligned images in order:
-1. Original image
-2. Internal Grad-CAM guide 
 
-Both images have identical dimensions, so every location in the second image corresponds exactly to the same location in the first image.
+• Image 1: Original image.
+• Image 2: Internal Grad-CAM attention guide.
+
+Both images have identical dimensions, so every location in Image 2 corresponds exactly to the same location in Image 1.
+
+In Image 2:
+- White regions indicate the classifier's strongest attention.
+- Black regions indicate regions that should be ignored.
 
 Prediction: {prediction}
+
 Real probability: {real_percentage:.1f}%
 AI-generated probability: {fake_percentage:.1f}%
 
-Task:
-- Step 1: Use the second image only to locate the main white areas. Ignore small isolated noise spots.
-- Step 2: Describe only the object part or background located at the same positions in the original image.
+Task
 
-Rules:
-- Never use the first image alone to determine where focus is located.
-- Describe only what is directly covered by the white areas in the second image.
-- Do not treat black and white areas in the first image as the GradCAM's focus area.
-- If only part of an object is covered, describe only that specific part.
-- Never mention an object, person, body part, or background region unless it is directly covered by the selected white areas in the second image. 
-- Do not speculate beyond what is directly visible in those areas.
-- Use cautious language such as "may", "might", or "could".
-- Always include both the real probability and AI-generated probability in your explanation.
+Use Image 2 only to identify the one or two largest meaningful white regions, ignoring small isolated white regions that appear to be noise.
 
-Output Rules:
-The user only sees a colored transparent overlay on the image.
+Then use Image 1 only to identify the object part or background located directly underneath those same regions.
 
-Forbidden vocabulary (DO NOT MENTION):
-- "Image 1" or "Image 2"
-- "attention guide" or "attention map"
-- "mask"
-- "white areas" or "black areas"
-- "internal processing"
-Do not describe or infer:
-- texture
-- edges
-- contours
-- boundaries
-- contrast
-- lighting
-- reflections
-- shadows
-- realism
-- photographic quality
+Rules
 
+- Never use Image 1 to determine where the classifier focused.
+- Describe only the object part or background directly covered by the selected white regions in Image 2.
+- If only part of an object is highlighted, describe only that specific part.
+- If a highlighted region overlaps multiple objects or body parts, describe only the object or body part occupying most of that highlighted region.
+- If only one meaningful highlighted region exists, describe only that region.
+- Do not mention any object, body part or background that is not directly covered by the selected white regions.
+- The highlighted regions may have contributed to the prediction, but they do not explain why the classifier made its decision.
+- Use cautious language such as "may", "might" or "could".
+- Include both prediction probabilities.
 
-Allowed vocabulary:
-Refer to focal areas ONLY as "highlighted regions", "highlighted areas", or "Grad-CAM highlighted regions".
+Output Rules
 
-Format:
-Write exactly one paragraph (5 to 7 sentences, 150 words).
+The user only sees the coloured transparent Grad-CAM overlay.
+
+Do not mention:
+- Image 1 or Image 2
+- attention guide
+- mask
+- white regions
+- black regions
+- internal processing
+
+Instead, refer only to:
+- highlighted regions
+- highlighted areas
+- Grad-CAM highlighted regions
+
+Write exactly one paragraph of approximately 150 words for a non-technical audience.
 """.strip()
 
         response = client.chat.completions.create(
