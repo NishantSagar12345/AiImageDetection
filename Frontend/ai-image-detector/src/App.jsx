@@ -235,7 +235,7 @@ function App() {
           <h1>DeepCheck</h1>
           <p>
             AI image authenticity analysis with Deep Learning and
-            GPT-4o's reasoning.
+            GPT-5.6-Luna's reasoning.
           </p>
         </header>
 
@@ -275,7 +275,7 @@ function App() {
               <div className="loading-box">
                 <div className="spinner"></div>
                 <h2>DeepCheck is analysing...</h2>
-                <p>Running Deep Learning prediction, Grad-CAM, and GPT4o explanation.</p>
+                <p>Running Deep Learning prediction, Grad-CAM, and GPT5.6Luna explanation.</p>
               </div>
             ) : result ? (
               <>
@@ -331,7 +331,7 @@ function App() {
 
                 {result.llm_explanation && (
                   <div className="llm-box">
-                    <h3>GPT-4o Explanation</h3>
+                    <h3>GPT5.6-luna Explanation</h3>
                     <p>{result.llm_explanation}</p>
                   </div>
                 )}
@@ -372,7 +372,7 @@ function App() {
       <ul>
         <li>Deep Learning image classification</li>
         <li>Grad-CAM visual explanations</li>
-        <li>GPT-4o reasoning for prediction interpretation</li>
+        <li>GPT-5.6 reasoning for prediction interpretation</li>
         <li>Confidence scores and probability visualization</li>
       </ul>
 
@@ -382,7 +382,7 @@ function App() {
         <li>Upload an image or select an image from the image button.</li>
         <li>The model predicts whether it is AI-generated or real.</li>
         <li>Grad-CAM highlights influential image regions.</li>
-        <li>GPT-4o provides a natural language explanation.</li>
+        <li>GPT-5.6 provides a natural language explanation.</li>
       </ol>
 
       <p className="modal-note">
