@@ -1,8 +1,8 @@
 import { useState } from "react";
 import "./App.css";
 
-const API_URL = "/predict";
-const BACKEND_URL = "";
+const API_URL = "http://127.0.0.1:8000/predict";
+const BACKEND_URL = "http://127.0.0.1:8000";
 
 function App() {
   const [file, setFile] = useState(null);
@@ -372,7 +372,7 @@ function App() {
       <ul>
         <li>Deep Learning image classification</li>
         <li>Grad-CAM visual explanations</li>
-        <li>GPT-5.6-Luna's reasoning for prediction interpretation</li>
+        <li>GPT-5.6 reasoning for prediction interpretation</li>
         <li>Confidence scores and probability visualization</li>
       </ul>
 
