@@ -67,22 +67,19 @@ Focus primarily on Image 2 (the Grad-CAM heatmap). Treat the heatmap as the prim
 
 Use Image 1 only as a reference to identify the objects or regions that correspond to the highlighted areas in the heatmap. Do not base your explanation on the colours, appearance or composition of the original image unless they directly overlap with the highlighted regions in the heatmap.
 
-Interpret the heatmap using the following priority:
-• Red = highest importance
-• Bright yellow = high importance
-• Green = moderate importance
-• Blue = low importance
+• Red / Orange zones = Main focus area (Primary Activation Hotspots)
 
-Base the explanation only on the strongest red and bright yellow regions. Mention at most the two most strongly highlighted regions. Ignore green and blue regions unless no stronger activations exist. If only part of an object is highlighted, describe only that highlighted part.
+• Blue zones Bright Yellow and Green zones = Least focus area (Peripheral and Contextual Triggers)
+
+Base the explanation only on the strongest red and orange regions. Mention at most the two most strongly highlighted regions. Ignore green and blue regions unless no stronger activations exist. If only part of an object is highlighted, describe only that highlighted part.
 
 Important rules:
 • Base the explanation only on information visible in the Grad-CAM heatmap.
 • The Grad-CAM heatmap indicates where the classifier focused its attention. It does not explain the model's reasoning.
 • Explain that the highlighted regions may have influenced the prediction.
-• The colours present in both GRAD-CAM and orginal image should not be treated as a heatmap
-• If both GRAD-CAM image and orignal image contain yellow colour then dont treat it as a the part of heatmap and ignore it 
 • Do not invent reasons that cannot be directly inferred from the images.
 • Do not state that any object is characteristic of AI-generated images.
+• If the higlighted areas are in the background near the face of the person then do not focus on the person facial features.
 • Do not speculate about lighting, textures, shadows or visual artefacts unless they are clearly visible within the strongest highlighted regions.
 • If the highlighted region in the heatmap is in the background talk about it also.
 • Use cautious language such as "may", "might" or "could".
