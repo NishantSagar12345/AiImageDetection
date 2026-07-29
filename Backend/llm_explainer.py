@@ -79,9 +79,10 @@ Important rules:
 • Explain that the highlighted regions may have influenced the prediction.
 • Do not invent reasons that cannot be directly inferred from the images.
 • Do not state that any object is characteristic of AI-generated images.
+
 • If the higlighted areas are in the background near the face of the person then do not focus on the person facial features.
 • Do not speculate about lighting, textures, shadows or visual artefacts unless they are clearly visible within the strongest highlighted regions.
-• If the highlighted region in the heatmap is in the background talk about it also.
+• Always check for the background regions including the edges of the image 2 for primary Activation Hotspots 
 • Use cautious language such as "may", "might" or "could".
 • Include both prediction probabilities as percentages.
 
