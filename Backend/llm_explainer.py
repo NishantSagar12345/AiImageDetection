@@ -76,14 +76,12 @@ def explain_gradcam_with_llm(
     • Explain that the highlighted regions may have influenced the prediction.
     • Do not invent reasons that cannot be directly inferred from the heatmap.
     • Do not state that any object is characteristic of AI-generated images.
-    • If the highlighted areas are in the background near a person's face, do not focus on the person's facial features.
     • Do not speculate about lighting, textures, shadows or visual artefacts unless they are clearly visible within the strongest highlighted regions.
-    • Always check background regions, including the edges of the heatmap, for primary activation hotspots.
     • Use cautious language such as "may", "might" or "could".
     • Include both prediction probabilities as percentages.
 
     Return the explanation as plain text with no Markdown formatting.
-    Write one concise paragraph of 80–120 words suitable for a non-technical audience."""
+    Write one concise paragraph of 150 words suitable for a non-technical audience."""
 
     try:
 
