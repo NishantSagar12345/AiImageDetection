@@ -54,38 +54,36 @@ def explain_gradcam_with_llm(
     )
 
     prompt = f"""
-You are analysing the output of an AI-generated image detector.
+    You are analysing the output of an AI-generated image detector.
 
-Image 1 is the original image.
-Image 2 is the Grad-CAM heatmap overlay.
+    The image provided is the attention heatmap overlay.
 
-Prediction: {prediction}
-Real probability: {real_prob:.3f}
-AI-generated probability: {fake_prob:.3f}
+    Prediction: {prediction}
+    Real probability: {real_prob:.3f}
+    AI-generated probability: {fake_prob:.3f}
 
-Focus primarily on Image 2 (the Grad-CAM heatmap). Treat the heatmap as the primary source of information.
+    Focus only on the attention heatmap overlay. Treat the heatmap as the primary and only source of information.
 
-Use Image 1 only as a reference to identify the objects or regions that correspond to the highlighted areas in the heatmap. Do not base your explanation on the colours, appearance or composition of the original image unless they directly overlap with the highlighted regions in the heatmap.
+    • Red / Orange = Main focus area (Primary Activation Hotspots)
 
-• Red / Orange zones = Main focus area (Primary Activation Hotspots)
+    • Blue zones, bright yellow and green zones = Least focus area
 
-• Blue zones Bright Yellow and Green zones = Least focus area (Peripheral and Contextual Triggers)
+    Base the explanation only on the strongest red and orange regions. Mention at most the two most strongly highlighted regions. Ignore green and blue regions unless no stronger activations exist. If only part of an object or region is highlighted, describe only that highlighted part.
 
-Base the explanation only on the strongest red and orange regions. Mention at most the two most strongly highlighted regions. Ignore green and blue regions unless no stronger activations exist. If only part of an object is highlighted, describe only that highlighted part.
+    Important rules:
+    • Base the explanation only on information visible in the attention heatmap.
+    • The attention heatmap indicates where the classifier focused its attention. It does not explain the model's reasoning.
+    • Explain that the highlighted regions may have influenced the prediction.
+    • Do not invent reasons that cannot be directly inferred from the heatmap.
+    • Do not state that any object is characteristic of AI-generated images.
+    • If the highlighted areas are in the background near a person's face, do not focus on the person's facial features.
+    • Do not speculate about lighting, textures, shadows or visual artefacts unless they are clearly visible within the strongest highlighted regions.
+    • Always check background regions, including the edges of the heatmap, for primary activation hotspots.
+    • Use cautious language such as "may", "might" or "could".
+    • Include both prediction probabilities as percentages.
 
-Important rules:
-• Base the explanation only on information visible in the Grad-CAM heatmap.
-• The Grad-CAM heatmap indicates where the classifier focused its attention. It does not explain the model's reasoning.
-• Explain that the highlighted regions may have influenced the prediction.
-• Do not invent reasons that cannot be directly inferred from the images.
-• Do not state that any object is characteristic of AI-generated images.
-• If the higlighted areas are in the background near the face of the person then do not focus on the person facial features.
-• Do not speculate about lighting, textures, shadows or visual artefacts unless they are clearly visible within the strongest highlighted regions.
-• Always check for the background regions including the edges of the image 2 for primary Activation Hotspots 
-• Use cautious language such as "may", "might" or "could".
-• Include both prediction probabilities as percentages.
-Return the explanation as plain text with no Markdown formatting. 
-Write one concise paragraph (80–120 words) suitable for a non-technical audience."""
+    Return the explanation as plain text with no Markdown formatting.
+    Write one concise paragraph of 80–120 words suitable for a non-technical audience."""
 
     try:
 
@@ -100,12 +98,6 @@ Write one concise paragraph (80–120 words) suitable for a non-technical audien
                         {
                             "type": "text",
                             "text": prompt
-                        },
-                        {
-                            "type": "image_url",
-                            "image_url": {
-                                "url": original_data_url
-                            }
                         },
                         {
                             "type": "image_url",

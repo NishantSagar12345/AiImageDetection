@@ -5,7 +5,7 @@ class SigLIPDetector(nn.Module):
     def __init__(self, model_name="google/siglip-base-patch16-224"):
         super().__init__()
 
-        self.backbone = AutoModel.from_pretrained(model_name)
+        self.backbone = AutoModel.from_pretrained(model_name,  attn_implementation="eager")
 
         hidden_size = self.backbone.config.vision_config.hidden_size
 
