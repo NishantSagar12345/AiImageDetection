@@ -521,7 +521,7 @@ def verify_attention_impact(
     return result
 
 
-def generate_gradcam(
+def generate_attention(
     image_path,
     model,
     processor,
@@ -534,9 +534,7 @@ def generate_gradcam(
     """
     Generates a Max-Fusion Terminal-Layer Attention Projection heatmap.
 
-    The function name generate_gradcam is retained for compatibility with the
-    existing application. However, this method does not calculate Grad-CAM.
-
+    
     Method implemented from the dissertation literature survey:
     1. Extract self-attention from the final Vision Transformer layer.
     2. Apply maximum fusion across attention heads.

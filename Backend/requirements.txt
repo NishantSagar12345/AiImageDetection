@@ -8,7 +8,6 @@ opencv-python-headless
 fastapi
 uvicorn
 python-multipart
-grad-cam
 matplotlib
 sentencepiece
 protobuf
