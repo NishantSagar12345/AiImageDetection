@@ -20,6 +20,10 @@ The system combines a fine-tuned **SigLIP Vision Transformer** with **Grad-CAM**
 The application is deployed using a production-style architecture consisting of a React frontend, FastAPI backend, Docker containers, Nginx reverse proxy, and AWS EC2.
 
 ---
+# Screenshot 
+![alt text](image.png)
+
+---
 
 # Features
 
