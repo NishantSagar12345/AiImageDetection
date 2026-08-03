@@ -1,6 +1,6 @@
 # DeepCheck AI
 
-An Explainable AI-powered multimedia forensic system for detecting AI-generated images using a fine-tuned SigLIP Vision Transformer and Grad-CAM visual explanations.
+An Explainable AI-powered web application for detecting AI-generated images using a fine-tuned SigLIP Vision Transformer and Grad-CAM visual explanations.
 
 ![Python](https://img.shields.io/badge/Python-3.11-blue)
 ![PyTorch](https://img.shields.io/badge/PyTorch-2.x-red)
