@@ -18,7 +18,7 @@ DeepCheck AI is an end-to-end Explainable AI (XAI) web application for detecting
 The system combines a fine-tuned **SigLIP Vision Transformer** with **Grad-CAM** and **OpenAI GPT-5.6 Luna** to provide both image classification and human-readable explanations of the regions that contributed most strongly to each prediction.
 
 The application is deployed using a production-style architecture consisting of a React frontend, FastAPI backend, Docker containers, Nginx reverse proxy, and AWS EC2.
-
+GitHub actions was used to make CI/CD pipelines.
 ---
 # Screenshot 
 ![alt text](image.png)

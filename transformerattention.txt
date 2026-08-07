@@ -1,0 +1,180 @@
+What your method does, in simple words
+
+Your method creates a heatmap showing which image patches received the strongest attention in the final Vision Transformer layer.
+
+1. The image is divided into patches
+
+The Vision Transformer does not examine the image as individual pixels. It divides the image into small squares.
+
+For a 224 × 224 image using 16 × 16 patches, it creates:
+
+14 × 14 = 196 image patches
+
+Each patch becomes a token.
+
+2. The transformer compares every patch with every other patch
+
+The model contains several attention heads. Each head may notice different relationships.
+
+For example:
+
+one head may focus on edges;
+another may focus on a face;
+another may focus on background patterns;
+another may focus on textures.
+
+The attention matrix records how strongly each patch attends to every other patch.
+
+3. You use only the final transformer layer
+
+Your code selects:
+
+attentions[-1]
+
+This is the final attention layer. It contains the most processed attention relationships produced by the vision encoder.
+
+You are not combining attention from all layers. That is why your method is called:
+
+Max-Fusion Terminal-Layer Attention Projection
+
+and not standard Attention Rollout.
+
+4. Max-Fusion keeps the strongest attention head
+
+For every relationship between two patches, you compare the values from all attention heads and retain the largest one.
+
+In simple terms:
+
+If any attention head strongly notices a relationship, preserve it.
+
+This can create sharper heatmaps than averaging all heads.
+
+However, it can also preserve one noisy or biased attention head, which may explain the repeated right-edge activation.
+
+5. Max Projection gives one score to every patch
+
+After Max-Fusion, you still have a large matrix showing relationships between every pair of patches.
+
+You then ask:
+
+What is the strongest attention this patch received from any other patch?
+
+That gives one attention score for each of the 196 patches.
+
+For example:
+
+Patch 1: 0.20
+Patch 2: 0.84
+Patch 3: 0.35
+
+Patch 2 becomes more strongly highlighted.
+
+6. The scores are reshaped into the image grid
+
+The 196 scores are reconstructed into a 14 × 14 layout matching the original patch positions.
+
+This gives a small spatial attention map.
+
+7. The map is normalised
+
+The weakest patch becomes close to 0, and the strongest becomes 1.
+
+This means the colours are relative to that particular image:
+
+red/orange: strongest attention;
+yellow/green: medium attention;
+blue: weakest attention.
+
+Red does not automatically mean “AI artifact.” It only means “strongest in this heatmap.”
+
+8. The map is enlarged and placed over the image
+
+The 14 × 14 map is resized to 224 × 224, coloured and blended with the image.
+
+The result shows where the model had its strongest final-layer attention relationships.
+
+What the heatmap actually means
+
+The correct interpretation is:
+
+The highlighted regions received strong attention in the final Vision Transformer layer and may have influenced the model.
+
+It does not prove:
+
+why the model predicted AI-generated or real;
+that the highlighted region contains an AI artifact;
+that the region caused the prediction;
+that unhighlighted regions were unimportant.
+What perturbation testing does
+
+Perturbation testing checks whether the highlighted region actually matters to the classifier.
+
+Step 1: Run the original image
+
+Suppose the detector gives:
+
+AI-generated probability: 91%
+Step 2: Select the strongest heatmap region
+
+You take the top highlighted area, such as the strongest 20% of attention values.
+
+Step 3: Blur that region
+
+Instead of adding a black box, you blur the highlighted region.
+
+Blurring removes some visual information while avoiding an unnatural black area.
+
+Step 4: Run the modified image again
+
+The detector processes the blurred image.
+
+Suppose the result becomes:
+
+AI-generated probability: 63%
+Step 5: Measure the confidence drop
+Original confidence: 91%
+Blurred confidence: 63%
+Confidence drop: 28%
+
+A large drop suggests the highlighted area contained information that supported the original prediction.
+
+A small drop suggests the highlighted area may not have been very important.
+
+A negative drop means the model became more confident after the region was blurred, which weakens the heatmap’s faithfulness.
+
+Why compare with a random region?
+
+Blurring any large part of an image may change the prediction. Therefore, you should also blur a random region of the same size.
+
+Example:
+
+Highlighted-region drop: 28%
+Random-region drop:       5%
+
+This supports the explanation because the highlighted region affected the model much more than a random region.
+
+But:
+
+Highlighted-region drop: 6%
+Random-region drop:      7%
+
+This suggests the heatmap region may not be more meaningful than chance.
+
+For the recurring right edge
+
+Run three equal-sized tests:
+
+Blur the highlighted right-edge region.
+Blur the strongest non-edge hotspot.
+Blur a random region.
+
+Then compare the confidence drops.
+
+This tells you whether the right edge is:
+
+genuinely influencing the prediction;
+merely a positional attention habit;
+or an artifact produced by Max-Fusion.
+Whole method in one sentence
+
+Your method finds the strongest final-layer attention relationships between image patches, converts them into a heatmap, and then tests the highlighted regions by blurring them and checking whether the classifier’s confidence decreases.

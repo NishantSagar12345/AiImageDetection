@@ -35,7 +35,7 @@ function App() {
     const response = await fetch(sample.url);
 
     if (!response.ok) {
-      throw new Error("Could not  sample image.");
+      throw new Error("Could not load sample image.");
     }
 
     const blob = await response.blob();
