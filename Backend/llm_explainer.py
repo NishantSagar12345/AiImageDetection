@@ -68,7 +68,7 @@ def explain_gradcam_with_llm(
 
     • Blue zones, bright yellow and green zones = Least focus area
 
-    Base the explanation only on the strongest red and orange regions. Mention at most the two most strongly highlighted regions. Ignore green and blue regions unless no stronger activations exist. If only part of an object or region is highlighted, describe only that highlighted part.
+    Base the explanation only on the strongest red and orange regions. Mention at most the four most strongly highlighted regions. Ignore green and blue regions unless no stronger activations exist. If only part of an object or region is highlighted, describe only that highlighted part.
 
     Important rules:
     • Base the explanation only on information visible in the attention heatmap.
