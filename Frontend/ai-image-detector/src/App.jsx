@@ -261,11 +261,11 @@ function App() {
             </div>
 
             <div className="preview-card">
-              <div className="card-title">Grad-CAM Heatmap</div>
+              <div className="card-title">Visual Evidence Heatmap</div>
               {gradcamUrl ? (
-                <img src={gradcamUrl} className="image-box" alt="Grad-CAM" />
+                <img src={gradcamUrl} className="image-box" alt="Heatmap" />
               ) : (
-                <div className="image-box placeholder">No Grad-CAM yet</div>
+                <div className="image-box placeholder">No Heatmap yet</div>
               )}
             </div>
           </section>
@@ -275,7 +275,7 @@ function App() {
               <div className="loading-box">
                 <div className="spinner"></div>
                 <h2>DeepCheck is analysing...</h2>
-                <p>Running Deep Learning prediction, Grad-CAM, and GPT5.6Luna explanation.</p>
+                <p>Running Deep Learning prediction, Max-Fusion Attention Projection, and GPT5.6Luna explanation.</p>
               </div>
             ) : result ? (
               <>
@@ -371,7 +371,7 @@ function App() {
 
       <ul>
         <li>Deep Learning image classification</li>
-        <li>Grad-CAM visual explanations</li>
+        <li>Visual Heatmap explanations</li>
         <li>GPT-5.6 reasoning for prediction interpretation</li>
         <li>Confidence scores and probability visualization</li>
       </ul>
@@ -381,7 +381,7 @@ function App() {
       <ol>
         <li>Upload an image or select an image from the image button.</li>
         <li>The model predicts whether it is AI-generated or real.</li>
-        <li>Grad-CAM highlights influential image regions.</li>
+        <li>Attention Projection Heatmaphighlights influential image regions.</li>
         <li>GPT-5.6 provides a natural language explanation.</li>
       </ol>
 
