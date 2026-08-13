@@ -23,7 +23,7 @@ os.makedirs(GRADCAM_DIR, exist_ok=True)
 
 app = FastAPI(
     title="AI Image Detector API",
-    description="AI-generated image detection using SigLIP, Grad-CAM and Vision LLM explanation",
+    description="AI-generated image detection using SigLIP, Transformer Heatmap and Vision LLM explanation",
     version="1.0"
 )
 
