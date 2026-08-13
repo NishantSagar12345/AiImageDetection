@@ -521,7 +521,7 @@ def verify_attention_impact(
     return result
 
 
-def generate_gradcam(
+def generate_attention_projection(
     image_path,
     model,
     processor,

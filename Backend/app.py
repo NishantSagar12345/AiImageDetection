@@ -10,7 +10,7 @@ from transformers import AutoImageProcessor
 
 from model import SigLIPDetector
 from inference import predict_image
-from llm_explainer import explain_gradcam_with_llm
+from llm_explainer import explain_heatmap_with_llm
 
 
 UPLOAD_DIR = "uploads"
@@ -124,7 +124,7 @@ async def predict(file: UploadFile = File(...)):
         threshold=0.5
     )
 
-    explanation = explain_gradcam_with_llm(
+    explanation = explain_heatmap_with_llm(
         original_image_path=upload_path,
         gradcam_path=gradcam_path,
         prediction=result["prediction"],

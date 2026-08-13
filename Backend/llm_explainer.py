@@ -34,7 +34,7 @@ def image_to_png_data_url(image_path, max_size=768):
     return f"data:image/png;base64,{encoded}"
 
 
-def explain_gradcam_with_llm(
+def explain_heatmap_with_llm(
     original_image_path,
     gradcam_path,
     prediction,

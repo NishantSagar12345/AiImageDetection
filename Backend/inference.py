@@ -1,6 +1,6 @@
 import torch
 from PIL import Image
-from gradcam_utils import generate_gradcam
+from attention_projection import generate_attention_projection
 import os
 
 def predict_image(
@@ -44,7 +44,7 @@ def predict_image(
     }
 
     if gradcam_path is not None:
-        generate_gradcam(
+        generate_attention_projection(
             image_path=image_path,
             model=model,
             processor=processor,
