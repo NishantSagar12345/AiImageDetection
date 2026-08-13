@@ -22,6 +22,10 @@ function App() {
     url: "/sample-images/real-sample-2.jpg",
   },
   {
+    name: "Real Sample 3",
+    url: "/sample-images/real-sample-3.jpg",
+  },
+  {
     name: "AI Sample 1",
     url: "/sample-images/ai-sample-1.png",
   },
@@ -29,7 +33,11 @@ function App() {
     name: "AI Sample 2",
     url: "/sample-images/ai-sample-2.jpg",
   },
-];
+  {
+    name: "AI Sample 3",
+    url: "/sample-images/ai-sample-3.jpg",
+  },
+  ];
   const selectSampleImage = async (sample) => {
   try {
     const response = await fetch(sample.url);
