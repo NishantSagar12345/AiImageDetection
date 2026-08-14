@@ -125,18 +125,16 @@ async def predict(file: UploadFile = File(...)):
         )
 
     result = predict_image(
-        image_path=upload_path,
-        model=model,
-        processor=processor,
-        device=device,
-        gradcam_path=gradcam_path,
-        attention_mask_path=attention_mask_path,
-        threshold=0.5,
+    image_path=upload_path,
+    model=model,
+    processor=processor,
+    device=device,
+    gradcam_path=gradcam_path,
+    threshold=0.5,
     )
 
     explanation = explain_gradcam_with_llm(
-        original_image_path=upload_path,
-        attention_mask_path=attention_mask_path,
+        gradcam_path=gradcam_path,
         prediction=result["prediction"],
         real_prob=result["real_probability"],
         fake_prob=result["fake_probability"],

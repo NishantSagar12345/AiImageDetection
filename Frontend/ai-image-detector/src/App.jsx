@@ -1,8 +1,8 @@
 import { useState } from "react";
 import "./App.css";
 
-const API_URL = "http://127.0.0.1:8000/predict";
-const BACKEND_URL = "http://127.0.0.1:8000";
+const API_URL = "/predict";
+const BACKEND_URL = "";
 
 function App() {
   const [file, setFile] = useState(null);
@@ -22,6 +22,14 @@ function App() {
     url: "/sample-images/real-sample-2.jpg",
   },
   {
+    name: "Real Sample 3",
+    url: "/sample-images/real-sample-3.jpg",
+  },
+  {
+    name: "Real Sample 4",
+    url: "/sample-images/real-sample-4.jpg",
+  },
+  {
     name: "AI Sample 1",
     url: "/sample-images/ai-sample-1.png",
   },
@@ -29,7 +37,15 @@ function App() {
     name: "AI Sample 2",
     url: "/sample-images/ai-sample-2.jpg",
   },
-];
+  {
+    name: "AI Sample 3",
+    url: "/sample-images/ai-sample-3.jpg",
+  },
+  {
+    name: "AI Sample 4",
+    url: "/sample-images/ai-sample-4.jpg",
+  },
+  ];
   const selectSampleImage = async (sample) => {
   try {
     const response = await fetch(sample.url);
@@ -55,7 +71,7 @@ function App() {
     setShowSamples(false);
   } catch (error) {
     console.error(error);
-    alert("Could not load the selected sample image.");
+    alert("Could not load the selected sample image now.");
   }
 };
   const handleImageChange = (e) => {
@@ -261,11 +277,11 @@ function App() {
             </div>
 
             <div className="preview-card">
-              <div className="card-title">Grad-CAM Heatmap</div>
+              <div className="card-title">Visual Evidence Heatmap</div>
               {gradcamUrl ? (
-                <img src={gradcamUrl} className="image-box" alt="Grad-CAM" />
+                <img src={gradcamUrl} className="image-box" alt="Heatmap" />
               ) : (
-                <div className="image-box placeholder">No Grad-CAM yet</div>
+                <div className="image-box placeholder">No Heatmap yet</div>
               )}
             </div>
           </section>
@@ -275,7 +291,7 @@ function App() {
               <div className="loading-box">
                 <div className="spinner"></div>
                 <h2>DeepCheck is analysing...</h2>
-                <p>Running Deep Learning prediction, Grad-CAM, and GPT5.6-Luna explanation.</p>
+                <p>Running Deep Learning prediction, Max-Fusion Attention Projection, and GPT5.6Luna explanation.</p>
               </div>
             ) : result ? (
               <>
@@ -331,7 +347,7 @@ function App() {
 
                 {result.llm_explanation && (
                   <div className="llm-box">
-                    <h3>GPT-5.6-Luna Explanation</h3>
+                    <h3>GPT5.6-luna Explanation</h3>
                     <p>{result.llm_explanation}</p>
                   </div>
                 )}
@@ -371,7 +387,7 @@ function App() {
 
       <ul>
         <li>Deep Learning image classification</li>
-        <li>Grad-CAM visual explanations</li>
+        <li>Visual Heatmap explanations</li>
         <li>GPT-5.6 reasoning for prediction interpretation</li>
         <li>Confidence scores and probability visualization</li>
       </ul>
@@ -381,8 +397,8 @@ function App() {
       <ol>
         <li>Upload an image or select an image from the image button.</li>
         <li>The model predicts whether it is AI-generated or real.</li>
-        <li>Grad-CAM highlights influential image regions.</li>
-        <li>GPT-5.6-Luna provides a natural language explanation.</li>
+        <li>Attention Projection Heatmaphighlights influential image regions.</li>
+        <li>GPT-5.6 provides a natural language explanation.</li>
       </ol>
 
       <p className="modal-note">

@@ -1,9 +1,11 @@
 import cv2
 import torch
 import numpy as np
+
 from PIL import Image
 from pytorch_grad_cam import GradCAM
 from pytorch_grad_cam.utils.image import show_cam_on_image
+from pytorch_grad_cam.utils.model_targets import ClassifierOutputTarget
 
 
 def reshape_transform(tensor):
@@ -17,22 +19,38 @@ def reshape_transform(tensor):
         [batch_size, hidden_size, grid_height, grid_width]
 
     For google/siglip-base-patch16-224:
-        224 / 16 = 14
-        14 × 14 = 196 patch tokens
+        Input size:   224 x 224
+        Patch size:   16 x 16
+        Patch grid:   14 x 14
+        Patch tokens: 196
+
+    SigLIP uses 196 spatial patch tokens here, so no CLS token
+    is removed before reconstructing the 14 x 14 grid.
     """
 
     if isinstance(tensor, tuple):
         tensor = tensor[0]
 
+    if tensor.ndim != 3:
+        raise ValueError(
+            "Expected transformer activation shape "
+            "[batch, tokens, hidden_size], "
+            f"but received {tuple(tensor.shape)}."
+        )
+
     batch_size, number_of_tokens, hidden_size = tensor.shape
 
-    grid_size = int(number_of_tokens**0.5)
+    grid_size = int(number_of_tokens ** 0.5)
 
     if grid_size * grid_size != number_of_tokens:
         raise ValueError(
-            f"Cannot reshape {number_of_tokens} tokens into a square grid."
+            f"Cannot reshape {number_of_tokens} tokens "
+            "into a square spatial grid."
         )
 
+    # [B, tokens, hidden]
+    #        ↓
+    # [B, grid, grid, hidden]
     tensor = tensor.reshape(
         batch_size,
         grid_size,
@@ -40,7 +58,14 @@ def reshape_transform(tensor):
         hidden_size,
     )
 
-    tensor = tensor.permute(0, 3, 1, 2)
+    # Grad-CAM expects:
+    # [B, channels, height, width]
+    tensor = tensor.permute(
+        0,
+        3,
+        1,
+        2,
+    )
 
     return tensor
 
@@ -51,34 +76,95 @@ def generate_gradcam(
     processor,
     device,
     save_path,
-    mask_save_path,
-    mask_threshold=0.50,
 ):
     """
-    Generate:
+    Generate a class-specific Grad-CAM visualisation for the
+    SigLIP-based Real / AI-generated image classifier.
 
-    1. A coloured Grad-CAM overlay for the frontend.
-    2. A binary attention mask for the LLM.
+    The predicted class is explicitly used as the Grad-CAM target.
 
-    White mask regions represent the strongest activations.
-    Black mask regions should be ignored.
+    Output:
+        Coloured Grad-CAM heatmap over a grayscale version
+        of the original image.
     """
 
     model.eval()
 
-    image = Image.open(image_path).convert("RGB")
+    # -----------------------------------------------------
+    # 1. Load image
+    # -----------------------------------------------------
+
+    image = Image.open(
+        image_path
+    ).convert("RGB")
 
     inputs = processor(
         images=image,
         return_tensors="pt",
     )
 
-    pixel_values = inputs["pixel_values"].to(device)
+    pixel_values = inputs[
+        "pixel_values"
+    ].to(device)
 
-    # Use LayerNorm from the final SigLIP transformer block.
+    # -----------------------------------------------------
+    # 2. Get classifier prediction
+    # -----------------------------------------------------
+
+    with torch.no_grad():
+
+        logits = model(
+            pixel_values
+        )
+
+        probabilities = torch.softmax(
+            logits,
+            dim=1,
+        )[0]
+
+    predicted_class = int(
+        torch.argmax(
+            probabilities
+        ).item()
+    )
+
+    real_probability = float(
+        probabilities[0].item()
+    )
+
+    ai_probability = float(
+        probabilities[1].item()
+    )
+
+    prediction = (
+        "AI-generated"
+        if predicted_class == 1
+        else "Real"
+    )
+
+    # -----------------------------------------------------
+    # 3. Select final SigLIP transformer block
+    # -----------------------------------------------------
+
     target_layers = [
-        model.backbone.vision_model.encoder.layers[-1].layer_norm1
+        model
+        .backbone
+        .vision_model
+        .encoder
+        .layers[-1]
+        .layer_norm1
     ]
+
+    # Explicitly explain the predicted class.
+    targets = [
+        ClassifierOutputTarget(
+            predicted_class
+        )
+    ]
+
+    # -----------------------------------------------------
+    # 4. Generate Grad-CAM
+    # -----------------------------------------------------
 
     cam = GradCAM(
         model=model,
@@ -88,16 +174,15 @@ def generate_gradcam(
 
     grayscale_cam = cam(
         input_tensor=pixel_values,
+        targets=targets,
     )[0]
 
-    # Keep Grad-CAM values within the expected range.
     grayscale_cam = np.clip(
         grayscale_cam,
         0.0,
         1.0,
     )
 
-    # Ensure the CAM matches the displayed image dimensions.
     grayscale_cam = cv2.resize(
         grayscale_cam,
         (224, 224),
@@ -105,26 +190,53 @@ def generate_gradcam(
     )
 
     # -----------------------------------------------------
-    # Coloured Grad-CAM overlay for the frontend
+    # 5. Create grayscale background
     # -----------------------------------------------------
 
-    rgb_image = image.resize(
+    resized_image = image.resize(
         (224, 224),
         Image.Resampling.LANCZOS,
     )
 
-    rgb_image = (
-        np.asarray(rgb_image, dtype=np.float32) / 255.0
+    image_np = np.asarray(
+        resized_image,
+        dtype=np.uint8,
     )
 
+    grayscale_background = cv2.cvtColor(
+        image_np,
+        cv2.COLOR_RGB2GRAY,
+    )
+
+    # show_cam_on_image expects 3 channels.
+    grayscale_background = cv2.cvtColor(
+        grayscale_background,
+        cv2.COLOR_GRAY2RGB,
+    )
+
+    grayscale_background = (
+        grayscale_background.astype(
+            np.float32
+        )
+        / 255.0
+    )
+
+    # -----------------------------------------------------
+    # 6. Overlay coloured Grad-CAM on grayscale image
+    # -----------------------------------------------------
+
     cam_image = show_cam_on_image(
-        rgb_image,
+        grayscale_background,
         grayscale_cam,
         use_rgb=True,
         image_weight=0.55,
     )
 
-    gradcam_saved = cv2.imwrite(
+    # -----------------------------------------------------
+    # 7. Save Grad-CAM image
+    # -----------------------------------------------------
+
+    success = cv2.imwrite(
         save_path,
         cv2.cvtColor(
             cam_image,
@@ -132,51 +244,19 @@ def generate_gradcam(
         ),
     )
 
-    if not gradcam_saved:
+    if not success:
         raise RuntimeError(
             f"Failed to save Grad-CAM image: {save_path}"
         )
 
     # -----------------------------------------------------
-    # Binary attention mask for the LLM
+    # 8. Return results
     # -----------------------------------------------------
 
-    binary_mask = np.where(
-        grayscale_cam >= mask_threshold,
-        255,
-        0,
-    ).astype(np.uint8)
-
-    kernel = np.ones(
-        (3, 3),
-        dtype=np.uint8,
-    )
-
-    # Remove small isolated activations.
-    binary_mask = cv2.morphologyEx(
-        binary_mask,
-        cv2.MORPH_OPEN,
-        kernel,
-    )
-
-    # Fill small gaps within strongly activated areas.
-    binary_mask = cv2.morphologyEx(
-        binary_mask,
-        cv2.MORPH_CLOSE,
-        kernel,
-    )
-
-    mask_saved = cv2.imwrite(
-        mask_save_path,
-        binary_mask,
-    )
-
-    if not mask_saved:
-        raise RuntimeError(
-            f"Failed to save attention mask: {mask_save_path}"
-        )
-
     return {
+        "prediction": prediction,
+        "predicted_class": predicted_class,
+        "real_probability": real_probability,
+        "ai_probability": ai_probability,
         "gradcam_path": save_path,
-        "attention_mask_path": mask_save_path,
     }

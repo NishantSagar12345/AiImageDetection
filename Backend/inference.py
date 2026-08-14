@@ -12,7 +12,6 @@ def predict_image(
     processor,
     device,
     gradcam_path=None,
-    attention_mask_path=None,
     threshold=0.5,
 ):
     model.eval()
@@ -26,33 +25,61 @@ def predict_image(
 
     pixel_values = inputs["pixel_values"].to(device)
 
+    # -----------------------------------------------------
+    # Classifier prediction
+    # -----------------------------------------------------
+
     with torch.no_grad():
         logits = model(pixel_values)
-        probs = torch.softmax(logits, dim=1)[0]
 
-    real_prob = float(probs[0])
-    fake_prob = float(probs[1])
+        probs = torch.softmax(
+            logits,
+            dim=1
+        )[0]
+
+    real_prob = float(
+        probs[0].item()
+    )
+
+    fake_prob = float(
+        probs[1].item()
+    )
+
+    # -----------------------------------------------------
+    # Final prediction
+    # -----------------------------------------------------
 
     if fake_prob >= threshold:
+
         prediction = "AI-generated"
         confidence = fake_prob
+
     else:
+
         prediction = "Real"
         confidence = real_prob
 
     result = {
         "prediction": prediction,
-        "confidence": round(confidence, 4),
-        "real_probability": round(real_prob, 4),
-        "fake_probability": round(fake_prob, 4),
+        "confidence": round(
+            confidence,
+            4
+        ),
+        "real_probability": round(
+            real_prob,
+            4
+        ),
+        "fake_probability": round(
+            fake_prob,
+            4
+        ),
     }
 
+    # -----------------------------------------------------
+    # Generate class-specific Grad-CAM
+    # -----------------------------------------------------
+
     if gradcam_path is not None:
-        if attention_mask_path is None:
-            raise ValueError(
-                "attention_mask_path is required when "
-                "gradcam_path is provided."
-            )
 
         generate_gradcam(
             image_path=image_path,
@@ -60,12 +87,11 @@ def predict_image(
             processor=processor,
             device=device,
             save_path=gradcam_path,
-            mask_save_path=attention_mask_path,
         )
 
         result["gradcam_url"] = (
-            f"/gradcam/{os.path.basename(gradcam_path)}"
+            f"/gradcam/"
+            f"{os.path.basename(gradcam_path)}"
         )
 
     return result
-
