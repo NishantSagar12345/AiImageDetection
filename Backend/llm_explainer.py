@@ -50,36 +50,39 @@ def explain_gradcam_with_llm(
     )
 
     prompt = f"""
-    You are analysing the output of an AI-generated image detector.
+    You are analysing the visual explanation produced by an AI-generated image detector.
 
-    The image provided is the GradCAM heatmap overlay.
+The provided image is a class-specific Grad-CAM attribution heatmap overlay generated for the detector's predicted class.
 
-    Prediction: {prediction}
-    Real probability: {real_prob:.3f}
-    AI-generated probability: {fake_prob:.3f}
+Prediction: {prediction}
+Real probability: {real_prob:.3f}
+AI-generated probability: {fake_prob:.3f}
 
-    Focus only on the GradCAM heatmap overlay. Treat the heatmap as the primary and only source of information.
+Interpret the heatmap using the following rules:
 
-    • Red / Orange = Strongest activation regions (Primary Attribution Hotspots). Larger and more intense red/orange areas indicate stronger focus area(Primary Activation Hotspots)
-    • Blue zones, bright yellow and green zones = Least focus area
-    • Grey Zones = Ignore these zones     
-    Base the explanation only on the strongest red and orange regions. Mention at most the four most strongly highlighted regions. Ignore green and blue regions unless no stronger activations exist. If only part of an object or region is highlighted, describe only that highlighted part.
+• Red / Orange = strongest class-specific attribution regions (Primary Activation Hotspots). Larger and more intense red/orange regions indicate stronger Grad-CAM attribution.
+• Yellow / Green = moderate or weaker attribution.
+• Blue = low attribution.
+• Grey = underlying image background only and should not be interpreted as attribution.
 
-    Important rules:
-    • Base the explanation only on information visible in the GradCAM heatmap.
-    • Always ignore the Grey Zone Areas
-    • The attention heatmap indicates where the classifier focused its attention. It does not explain the model's reasoning.
-    • Explain that the highlighted regions may have influenced the prediction.
-    • Do not invent reasons that cannot be directly inferred from the heatmap.
-    • Do not state that any object is characteristic of AI-generated images.
-    • If the highlighted areas are in the background near a person's face, do not focus on the person's facial features.
-    • Do not speculate about lighting, textures, shadows or visual artefacts unless they are clearly visible within the strongest highlighted regions.
-    • Always check background regions, including the edges of the heatmap, for primary activation hotspots.
-    • Use cautious language such as "may", "might" or "could".
-    • Include both prediction probabilities as percentages.
+Focus primarily on the strongest red and orange regions. Mention at most four dominant highlighted regions. If only part of an object or area is strongly highlighted, describe only that highlighted part rather than the whole object.
 
-    Return the explanation as plain text with no Markdown formatting.
-    Write one concise paragraph of 150 words suitable for a non-technical audience."""
+Important rules:
+• Base the spatial explanation only on information visible in the Grad-CAM overlay.
+• Ignore grey background regions unless they contain a coloured Grad-CAM activation.
+• Describe highlighted regions as areas strongly associated with the predicted class.
+• Do not claim that a highlighted region definitively caused the prediction or reveals the model's complete reasoning.
+• Do not invent explanations that cannot be directly supported by the visualisation.
+• Do not state that any object, texture, colour, or scene characteristic is inherently typical of AI-generated images.
+• If a hotspot appears in the background or near the edge of the image, describe that location accurately rather than assigning it to a nearby object.
+• If activation occurs near a person but primarily covers the surrounding background, describe the background region rather than the person.
+• Do not speculate about lighting, textures, shadows, manipulation artefacts, or generation artefacts unless they are clearly visible within the strongest highlighted region.
+• Use cautious language such as "appears", "may", "might", "could", "is associated with", or "shows strong attribution".
+• Include both prediction probabilities as percentages.
+• Keep the prediction result and the Grad-CAM interpretation conceptually separate.
+
+Return the explanation as plain text with no Markdown formatting.
+Write one concise paragraph of approximately 150 words for a non-technical audience."""
 
     try:
 
