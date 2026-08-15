@@ -362,14 +362,14 @@ sudo systemctl restart nginx
                                    │
                 ┌──────────────────┼──────────────────┐
                 ▼                  ▼                  ▼
-          SigLIP Detector      Grad-CAM       Vision LLM (Groq)
+          SigLIP Detector      Grad-CAM       GPT5.6-Luan (OpenAI API)
 ```
 This deployment gives you a production-style architecture:
 
 Frontend: React served by Nginx.
 Backend: FastAPI running in Docker.
 Model: SigLIP with Grad-CAM.
-Vision-Language Layer: Llama 4 Scout via Groq.
+Vision-Language Layer: GTP5.6-Luna.
 Infrastructure: AWS EC2.
 Reverse Proxy: Nginx.
 Version Control: GitHub.

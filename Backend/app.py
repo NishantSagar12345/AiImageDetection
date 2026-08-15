@@ -113,12 +113,6 @@ async def predict(file: UploadFile = File(...)):
         f"gradcam_{unique_id}.png",
     )
 
-    # New attention-mask path used only by the LLM.
-    attention_mask_path = os.path.join(
-        GRADCAM_DIR,
-        f"attention_mask_{unique_id}.png",
-    )
-
     with open(upload_path, "wb") as file_object:
         file_object.write(
             await file.read()
