@@ -63,11 +63,12 @@ def explain_gradcam_with_llm(
     • Red / Orange = Main focus area (Primary Activation Hotspots)
 
     • Blue zones, bright yellow and green zones = Least focus area
-
+    • Grey Zones = Ignore this zones     
     Base the explanation only on the strongest red and orange regions. Mention at most the four most strongly highlighted regions. Ignore green and blue regions unless no stronger activations exist. If only part of an object or region is highlighted, describe only that highlighted part.
 
     Important rules:
     • Base the explanation only on information visible in the GradCAM heatmap.
+    • Always ignore the Grey Zone Areas
     • The attention heatmap indicates where the classifier focused its attention. It does not explain the model's reasoning.
     • Explain that the highlighted regions may have influenced the prediction.
     • Do not invent reasons that cannot be directly inferred from the heatmap.
