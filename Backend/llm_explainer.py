@@ -60,10 +60,9 @@ def explain_gradcam_with_llm(
 
     Focus only on the GradCAM heatmap overlay. Treat the heatmap as the primary and only source of information.
 
-    • Red / Orange = Main focus area (Primary Activation Hotspots)
-
+    • Red / Orange = Strongest activation regions (Primary Attribution Hotspots). Larger and more intense red/orange areas indicate stronger focus area(Primary Activation Hotspots)
     • Blue zones, bright yellow and green zones = Least focus area
-    • Grey Zones = Ignore this zones     
+    • Grey Zones = Ignore these zones     
     Base the explanation only on the strongest red and orange regions. Mention at most the four most strongly highlighted regions. Ignore green and blue regions unless no stronger activations exist. If only part of an object or region is highlighted, describe only that highlighted part.
 
     Important rules:
