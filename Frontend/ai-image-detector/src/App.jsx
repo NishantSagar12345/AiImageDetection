@@ -277,11 +277,11 @@ function App() {
             </div>
 
             <div className="preview-card">
-              <div className="card-title">Visual Evidence Heatmap</div>
+              <div className="card-title">GradCAM Heatmap</div>
               {gradcamUrl ? (
                 <img src={gradcamUrl} className="image-box" alt="Heatmap" />
               ) : (
-                <div className="image-box placeholder">No Heatmap yet</div>
+                <div className="image-box placeholder">No GradCAM yet</div>
               )}
             </div>
           </section>
@@ -291,7 +291,7 @@ function App() {
               <div className="loading-box">
                 <div className="spinner"></div>
                 <h2>DeepCheck is analysing...</h2>
-                <p>Running Deep Learning prediction, Max-Fusion Attention Projection, and GPT5.6Luna explanation.</p>
+                <p>Running Deep Learning prediction, GradCAM HeatMap, and GPT5.6Luna explanation.</p>
               </div>
             ) : result ? (
               <>
@@ -355,7 +355,7 @@ function App() {
             ) : (
               <div className="empty-result">
                 <h2>Ready to analyse</h2>
-                <p>Upload an image to view prediction, heatmap, and explanation.</p>
+                <p>Upload an image to view prediction, GradCAM heatmap, and explanation.</p>
               </div>
             )}
           </section>
@@ -387,7 +387,7 @@ function App() {
 
       <ul>
         <li>Deep Learning image classification</li>
-        <li>Visual Heatmap explanations</li>
+        <li>GradCAM Heatmap explanations</li>
         <li>GPT-5.6 reasoning for prediction interpretation</li>
         <li>Confidence scores and probability visualization</li>
       </ul>
@@ -397,7 +397,7 @@ function App() {
       <ol>
         <li>Upload an image or select an image from the image button.</li>
         <li>The model predicts whether it is AI-generated or real.</li>
-        <li>Attention Projection Heatmaphighlights influential image regions.</li>
+        <li>GradCAM Heatmap highlights influential image regions.</li>
         <li>GPT-5.6 provides a natural language explanation.</li>
       </ol>
 
