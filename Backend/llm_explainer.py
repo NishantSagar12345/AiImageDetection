@@ -88,7 +88,7 @@ Write one concise paragraph of approximately 150 words for a non-technical audie
 
         response = client.chat.completions.create(
 
-            model="gpt-5.6-terra",
+            model="gpt-5.6-sol",
             reasoning_effort="none",
             messages=[
                 {
