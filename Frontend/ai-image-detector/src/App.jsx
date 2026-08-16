@@ -251,7 +251,7 @@ function App() {
           <h1>DeepCheck</h1>
           <p>
             AI image authenticity analysis with Deep Learning and
-            GPT-5.6-Luna's reasoning.
+            GPT-5.6-Sol's reasoning.
           </p>
         </header>
 
@@ -291,7 +291,7 @@ function App() {
               <div className="loading-box">
                 <div className="spinner"></div>
                 <h2>DeepCheck is analysing...</h2>
-                <p>Running Deep Learning prediction, GradCAM HeatMap, and GPT5.6Luna explanation.</p>
+                <p>Running Deep Learning prediction, GradCAM HeatMap, and GPT5.6Sol explanation.</p>
               </div>
             ) : result ? (
               <>
@@ -347,7 +347,7 @@ function App() {
 
                 {result.llm_explanation && (
                   <div className="llm-box">
-                    <h3>GPT5.6-luna Explanation</h3>
+                    <h3>GPT5.6-sol Explanation</h3>
                     <p>{result.llm_explanation}</p>
                   </div>
                 )}
