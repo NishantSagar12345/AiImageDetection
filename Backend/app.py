@@ -129,6 +129,7 @@ async def predict(file: UploadFile = File(...)):
 
     explanation = explain_gradcam_with_llm(
         gradcam_path=gradcam_path,
+        original_image_path=upload_path, 
         prediction=result["prediction"],
         real_prob=result["real_probability"],
         fake_prob=result["fake_probability"],
