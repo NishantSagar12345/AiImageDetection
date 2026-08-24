@@ -387,7 +387,7 @@ function App() {
 
       <ul>
         <li>Deep Learning image classification</li>
-        <li>GradCAM Heatmap explanations</li>
+        <li>Grad-CAM Heatmap explanations</li>
         <li>GPT-5.6 reasoning for prediction interpretation</li>
         <li>Confidence scores and probability visualization</li>
       </ul>
@@ -397,7 +397,7 @@ function App() {
       <ol>
         <li>Upload an image or select an image from the image button.</li>
         <li>The model predicts whether it is AI-generated or real.</li>
-        <li>GradCAM Heatmap highlights influential image regions.</li>
+        <li>Grad-CAM Heatmap highlights influential image regions.</li>
         <li>GPT-5.6 provides a natural language explanation.</li>
       </ol>
 
