@@ -45,33 +45,76 @@ jobs:
           username: ${{ secrets.EC2_USERNAME }}
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
+
+            # AI-GENERATED / AI-ASSISTED DEPLOYMENT COMMANDS
+            # The following Linux deployment commands were created with
+            # assistance from ChatGPT (OpenAI).
+            # The related prompts and conversation are included separately
+            # in the AI code-generation conversation document.
+
+            # Navigate to the DeepCheck project directory on the EC2 instance.
             cd ~/AiImageDetection
 
             echo "Updating repository..."
+
+            # Retrieve the latest state of the main branch from GitHub.
             git fetch origin main
+
+            # Reset the production working directory to exactly match
+            # the latest version of the remote main branch.
             git reset --hard origin/main
             
             # Remove the Kaggle folder so it doesn't live on the EC2 instance
             echo "Removing Kaggle notebook files from production..."
+
+            # Remove development/notebook files that are not required
+            # on the production EC2 environment.
             rm -rf Kaggle
-            rm -rf deploymentarch.txt
+            rm -rf deploymentarch.txt README.md
+
             echo "Deploying backend..."
+
+            # Move into the FastAPI/backend deployment directory.
             cd Backend
+
+            # Stop and remove the currently running Docker Compose services.
             docker compose down
+
+            # Remove unused Docker containers, networks, images and build cache
+            # to reduce disk usage on the EC2 instance.
             docker system prune -af
+
+            # Remove unused Docker build cache.
             docker builder prune -f
+
+            # Rebuild the backend Docker image and start the services
+            # in detached mode.
             docker compose up -d --build
 
             echo "Deploying frontend..."
+
+            # Remove the previous React production build currently
+            # being served by Nginx.
             sudo rm -rf /var/www/html/*
+
+            # Copy the newly generated React production build
+            # into the Nginx web root directory.
             sudo cp -r /home/ubuntu/deepcheck-frontend/dist/* /var/www/html/
             
+            # Set Nginx's web-server user as the owner of the deployed files.
             sudo chown -R www-data:www-data /var/www/html
+
+            # Ensure the deployed frontend files and directories
+            # have appropriate read/execute permissions.
             sudo chmod -R 755 /var/www/html
 
+            # Validate the Nginx configuration before restarting the service.
             sudo nginx -t
+
+            # Restart Nginx so the latest frontend deployment is served.
             sudo systemctl restart nginx
 
+            # Remove Docker images that are no longer referenced.
             docker image prune -f
 
             echo "Deployment complete!"
