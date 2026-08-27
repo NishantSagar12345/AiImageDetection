@@ -2,12 +2,6 @@
 
 An explainable AI-powered web application for detecting AI-generated images using a fine-tuned SigLIP Vision Transformer, Grad-CAM visual attribution, and natural-language explanations.
 
-![Python](https://img.shields.io/badge/Python-3.11-blue)
-![PyTorch](https://img.shields.io/badge/PyTorch-2.x-red)
-![FastAPI](https://img.shields.io/badge/FastAPI-Backend-green)
-![React](https://img.shields.io/badge/React-Frontend-61DAFB)
-![AWS](https://img.shields.io/badge/AWS-EC2-orange)
-![Docker](https://img.shields.io/badge/Docker-Container-blue)
 
 ---
 
