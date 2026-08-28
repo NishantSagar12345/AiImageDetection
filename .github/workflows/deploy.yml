@@ -46,11 +46,17 @@ jobs:
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
 
-            # AI-GENERATED / AI-ASSISTED DEPLOYMENT COMMANDS
-            # The following Linux deployment commands were created with
-            # assistance from ChatGPT (OpenAI).
-            # The related prompts and conversation are included separately
-            # in the AI code-generation conversation document.
+
+            # AI-ASSISTED CODE
+            # ChatGPT was used to provide guidance for the Linux deployment commands below.
+            
+            # Prompt:
+            # "Provide the Linux commands required to update the DeepCheck repository on
+            # EC2, rebuild the Docker backend, copy the React build to the Nginx web root,
+            # set permissions, validate Nginx and restart the service."
+            
+            # The commands were reviewed and understood before inclusion in the project.
+                  
 
             # Navigate to the DeepCheck project directory on the EC2 instance.
             cd ~/AiImageDetection
