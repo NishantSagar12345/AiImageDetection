@@ -110,7 +110,7 @@ providing guidance on Linux commands used during deployment of the DeepCheck app
 
 Supporting documentation for the AI-assisted frontend development is included within the dissertation code submission ZIP.
 
-AI-assisted deployment commands are clearly identified through comments in the GitHub Actions deployment workflow file, with the relevant supporting conversation also included in the code submission.
+The AI-assisted deployment commands are clearly identified through comments in the GitHub Actions deployment workflow file.
 
 ---
 
