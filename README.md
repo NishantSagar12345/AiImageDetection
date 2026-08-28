@@ -101,11 +101,16 @@ The datasets themselves are not included directly in this repository.
 
 ## AI Prompt Documentation
 
-The prompt used for the GPT-5.6 Sol natural-language explanation component is documented separately.
+ChatGPT was used as a supportive tool during the development of DeepCheck AI.
 
-The **AI Prompt Document is available inside the `Research Proposal` OneDrive folder** associated with the dissertation project.
+Its use was limited to:
 
-The document contains the prompt and instructions used to guide the natural-language explanation component.
+assisting with frontend development for the React-based user interface;
+providing guidance on Linux commands used during deployment of the DeepCheck application.
+
+Supporting documentation for the AI-assisted frontend development is included within the dissertation code submission ZIP.
+
+AI-assisted deployment commands are clearly identified through comments in the GitHub Actions deployment workflow file, with the relevant supporting conversation also included in the code submission.
 
 ---
 
