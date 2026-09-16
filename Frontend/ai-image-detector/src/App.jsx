@@ -280,11 +280,11 @@ function App() {
             </div>
 
             <div className="preview-card">
-              <div className="card-title">GradCAM Heatmap</div>
+              <div className="card-title">Grad-CAM Heatmap</div>
               {gradcamUrl ? (
                 <img src={gradcamUrl} className="image-box" alt="Heatmap" />
               ) : (
-                <div className="image-box placeholder">No GradCAM yet</div>
+                <div className="image-box placeholder">No Grad-CAM yet</div>
               )}
             </div>
           </section>
